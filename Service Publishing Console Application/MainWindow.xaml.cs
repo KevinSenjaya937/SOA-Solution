@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ServiceModel;
 using SOA_SolutionDLL;
+using RestSharp;
+using Newtonsoft;
 
 namespace Service_Publishing_Console_Application
 {
@@ -23,6 +25,8 @@ namespace Service_Publishing_Console_Application
     public partial class MainWindow : Window
     {
         private static IAuthenticator_Server authServer;
+        private static string URL = "http://localhost:64223/";
+        private static RestClient client = new RestClient(URL);
 
         private String mode;
         private int token;
@@ -103,7 +107,15 @@ namespace Service_Publishing_Console_Application
 
         private void publishBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            if (serviceNameBox.Text != String.Empty &&
+                serviceDescBox.Text != String.Empty &&
+                serviceAPIEndpointBox.Text != String.Empty &&
+                serviceOperandsBox.Text != String.Empty &&
+                serviceOperandTypeBox.Text != String.Empty)
+            {
+                RestRequest request = new RestRequest("api/Services/{token}");
+                request.AddUrlSegment("token", this.token);
+                RestResponse response = 
         }
     }
 }

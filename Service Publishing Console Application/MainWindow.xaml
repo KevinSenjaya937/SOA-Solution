@@ -15,27 +15,25 @@
         <RadioButton x:Name="loginRadioBtn" Content="Login" HorizontalAlignment="Left" Margin="429,17,0,0" VerticalAlignment="Top" Checked="loginRadioBtn_Checked"/>
         <Button x:Name="loginRegisterBtn" Content="Button" HorizontalAlignment="Left" Margin="400,116,0,0" VerticalAlignment="Top" Width="82" Click="loginRegisterBtn_Click"/>
         <TextBlock x:Name="messagesBox" HorizontalAlignment="Left" Margin="550,86,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="#FF80B05D"/>
-        <Grid x:Name="publishGrid" HorizontalAlignment="Left" Height="260" Margin="44,154,0,0" VerticalAlignment="Top" Width="320">
-            <TextBlock x:Name="serviceNameText" HorizontalAlignment="Left" Margin="113,46,0,0" TextWrapping="Wrap" Text="Name: " VerticalAlignment="Top"/>
-            <TextBlock x:Name="apiEndpointText" HorizontalAlignment="Left" Margin="67,120,0,0" TextWrapping="Wrap" Text="API Endpoint: " VerticalAlignment="Top"/>
-            <TextBlock x:Name="descriptionText" HorizontalAlignment="Left" Margin="78,82,0,0" TextWrapping="Wrap" Text="Description: " VerticalAlignment="Top"/>
-            <TextBlock x:Name="apiEndpointText_Copy" HorizontalAlignment="Left" Margin="13,162,0,0" TextWrapping="Wrap" Text="Number of Operands: " VerticalAlignment="Top"/>
-            <TextBlock x:Name="apiEndpointText_Copy1" HorizontalAlignment="Left" Margin="59,199,0,0" TextWrapping="Wrap" Text="Operand Type: " VerticalAlignment="Top"/>
-            <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Publish Service" FontWeight="Bold"/>
-            <TextBox x:Name="serviceNameBox" HorizontalAlignment="Left" Margin="183,46,0,0" TextWrapping="Wrap" Text="Service Name" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="serviceDescBox" HorizontalAlignment="Left" Margin="183,82,0,0" TextWrapping="Wrap" Text="Service Desc." VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="serviceOperandsBox" HorizontalAlignment="Left" Margin="183,161,0,0" TextWrapping="Wrap" Text="Operands" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="serviceAPIEndpointBox" HorizontalAlignment="Left" Margin="183,120,0,0" TextWrapping="Wrap" Text="Endpoint" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="serviceOperandTypeBox" HorizontalAlignment="Left" Margin="183,198,0,0" TextWrapping="Wrap" Text="Type" VerticalAlignment="Top" Width="120"/>
-            <Button x:Name="publishBtn" Content="Publish" HorizontalAlignment="Left" Margin="183,236,0,0" VerticalAlignment="Top" Width="120" Click="publishBtn_Click"/>
-            <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="10,238,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="150"/>
-        </Grid>
         <Grid x:Name="unpublishGrid" HorizontalAlignment="Left" Height="240" Margin="457,154,0,0" VerticalAlignment="Top" Width="320">
             <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Unpublish Service" FontWeight="Bold"/>
             <ComboBox x:Name="servicesComboBox" HorizontalAlignment="Center" Margin="0,48,0,0" VerticalAlignment="Top" Width="180"/>
             <Button x:Name="unpublishBtn" Content="Unpublish" HorizontalAlignment="Center" Margin="0,96,0,0" VerticalAlignment="Top" Width="120"/>
             <TextBlock x:Name="unpublishStatusText" HorizontalAlignment="Center" Margin="0,137,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         </Grid>
+        <TextBlock x:Name="serviceNameText" HorizontalAlignment="Left" Margin="150,187,0,0" TextWrapping="Wrap" Text="Name: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="apiEndpointText" HorizontalAlignment="Left" Margin="104,261,0,0" TextWrapping="Wrap" Text="API Endpoint: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="descriptionText" HorizontalAlignment="Left" Margin="115,223,0,0" TextWrapping="Wrap" Text="Description: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="apiEndpointText_Copy" HorizontalAlignment="Left" Margin="50,303,0,0" TextWrapping="Wrap" Text="Number of Operands: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="apiEndpointText_Copy1" HorizontalAlignment="Left" Margin="96,340,0,0" TextWrapping="Wrap" Text="Operand Type: " VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="154,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Publish Service" FontWeight="Bold"/>
+        <TextBox x:Name="serviceNameBox" HorizontalAlignment="Left" Margin="220,187,0,0" TextWrapping="Wrap" Text="Service Name" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="serviceDescBox" HorizontalAlignment="Left" Margin="220,223,0,0" TextWrapping="Wrap" Text="Service Desc." VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="serviceOperandsBox" HorizontalAlignment="Left" Margin="220,302,0,0" TextWrapping="Wrap" Text="Operands" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="serviceAPIEndpointBox" HorizontalAlignment="Left" Margin="220,261,0,0" TextWrapping="Wrap" Text="Endpoint" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="serviceOperandTypeBox" HorizontalAlignment="Left" Margin="220,339,0,0" TextWrapping="Wrap" Text="Type" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="publishBtn" Content="Publish" HorizontalAlignment="Left" Margin="220,377,0,0" VerticalAlignment="Top" Width="120" Click="publishBtn_Click"/>
+        <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="47,379,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="150"/>
 
     </Grid>
 </Window>
