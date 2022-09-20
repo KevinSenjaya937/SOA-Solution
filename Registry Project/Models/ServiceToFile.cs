@@ -64,17 +64,14 @@ namespace Registry_Project.Models
             foreach (string line in lines)
             {
                 servVals=line.Split(',');
-                if (true)
+                services.Add(new Service()
                 {
-                    services.Add(new Service()
-                    {
-                        Name = servVals[0],
-                        Description = servVals[1],
-                        APIEndPoint = servVals[2],
-                        NumOfOperands = Int16.Parse(servVals[3]),
-                        OperandType = servVals[4]
-                    });
-                }
+                    Name = servVals[0],
+                    Description = servVals[1],
+                    APIEndPoint = servVals[2],
+                    NumOfOperands = Int16.Parse(servVals[3]),
+                    OperandType = servVals[4]
+                });
             }
             return services;
         }
@@ -92,7 +89,7 @@ namespace Registry_Project.Models
                 }
             }
 
-            using(FileStream fileStream = File.Open(servicePath,FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            using(FileStream fileStream = File.Open(servicePath,FileMode.OpenOrCreate,FileAccess.ReadWrite))
             {
                 lock (fileStream)
                 {

@@ -47,17 +47,6 @@ namespace Service_Publishing_Console_Application
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
         // Radio Button Functions
         private void registerRadioBtn_Checked(object sender, RoutedEventArgs e)
         {
