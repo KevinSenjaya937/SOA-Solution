@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator Project", "Au
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceProvider", "ServiceProviderData\ServiceProvider.csproj", "{48AFB31F-33DD-4E0C-B6BF-7FF336DB8811}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service Publishing Console Application", "Service Publishing Console Application\Service Publishing Console Application.csproj", "{54308CC2-C8DF-42C1-A1A9-F84DF2F0E5E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service Publishing Console Application", "Service Publishing Console Application\Service Publishing Console Application.csproj", "{4659FD71-B434-430E-87ED-2F25C7D9D0E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{48AFB31F-33DD-4E0C-B6BF-7FF336DB8811}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48AFB31F-33DD-4E0C-B6BF-7FF336DB8811}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48AFB31F-33DD-4E0C-B6BF-7FF336DB8811}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54308CC2-C8DF-42C1-A1A9-F84DF2F0E5E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54308CC2-C8DF-42C1-A1A9-F84DF2F0E5E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54308CC2-C8DF-42C1-A1A9-F84DF2F0E5E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54308CC2-C8DF-42C1-A1A9-F84DF2F0E5E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4659FD71-B434-430E-87ED-2F25C7D9D0E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4659FD71-B434-430E-87ED-2F25C7D9D0E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4659FD71-B434-430E-87ED-2F25C7D9D0E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4659FD71-B434-430E-87ED-2F25C7D9D0E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

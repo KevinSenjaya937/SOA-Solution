@@ -7,8 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="400,217,0,0" VerticalAlignment="Top"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="400,276,0,0" VerticalAlignment="Top"/>
-
+        <TextBox x:Name="usernameBox" HorizontalAlignment="Left" Margin="381,53,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="120"/>
+        <TextBlock x:Name="usernameText" HorizontalAlignment="Left" Margin="290,55,0,0" TextWrapping="Wrap" Text="Username: " VerticalAlignment="Top"/>
+        <TextBox x:Name="passwordBox" HorizontalAlignment="Left" Margin="381,84,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="120"/>
+        <TextBlock x:Name="passwordText" HorizontalAlignment="Left" Margin="295,86,0,0" TextWrapping="Wrap" Text="Password: " VerticalAlignment="Top"/>
+        <RadioButton x:Name="registerRadioBtn" Content="Register" HorizontalAlignment="Left" Margin="295,17,0,0" VerticalAlignment="Top" Checked="registerRadioBtn_Checked"/>
+        <RadioButton x:Name="loginRadioBtn" Content="Login" HorizontalAlignment="Left" Margin="429,17,0,0" VerticalAlignment="Top" Checked="loginRadioBtn_Checked"/>
+        <Button x:Name="loginRegisterBtn" Content="Button" HorizontalAlignment="Left" Margin="400,116,0,0" VerticalAlignment="Top" Width="82" Click="loginRegisterBtn_Click"/>
+        <ComboBox x:Name="servicesComboBox" HorizontalAlignment="Left" Margin="290,164,0,0" VerticalAlignment="Top" Width="211"/>
+        <TextBox HorizontalAlignment="Left" Margin="381,215,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="381,242,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="381,269,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="381,296,100,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
