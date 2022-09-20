@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="IAuthenticator_Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
