@@ -146,9 +146,11 @@ namespace ClientGUI
 
         private void servicesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int x = (int)servicesComboBox.SelectedItem;
-            createOperandBoxes(x);
-            createHelperTexts(x);
+            string selected = servicesComboBox.SelectedItem.ToString();
+            Service selectedService = services[selected];
+
+            createOperandBoxes(selectedService.NumOfOperands);
+            createHelperTexts(selectedService.NumOfOperands);
         }
 
         private void createOperandBoxes(int numOfOperands)
@@ -241,6 +243,35 @@ namespace ClientGUI
                 }
                 
             }
+        }
+
+        private void calculateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string selected = servicesComboBox.SelectedItem.ToString();
+            Service selectedService = services[selected];
+            List<int> operands = new List<int>();
+
+            foreach (TextBox textBox in textBoxes)
+            {
+                if (textBox.Text != String.Empty)
+                {
+                    operands.Add(Int32.Parse(textBox.Text));
+                }
+            }
+
+            string endPoint = selectedService.APIEndPoint;
+
+            foreach (int operand in operands)
+            {
+                endPoint = endPoint + operand + "/";
+            }
+
+            RestRequest request = new RestRequest(endPoint);
+            RestResponse response = client.Execute(request);
+
+            Result result = JsonConvert.DeserializeObject<Result>(response.Content);
+
+            resultBox.Text = result.Value.ToString();
         }
     }
 }
