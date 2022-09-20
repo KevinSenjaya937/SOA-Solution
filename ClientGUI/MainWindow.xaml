@@ -19,5 +19,6 @@
         <TextBox x:Name="serviceSearchBox" HorizontalAlignment="Left" Margin="550,168,0,0" TextWrapping="Wrap" Text="Service Name" VerticalAlignment="Top" Width="150"/>
         <TextBlock x:Name="searchServiceText" HorizontalAlignment="Left" Margin="550,143,0,0" TextWrapping="Wrap" Text="Search Service: " VerticalAlignment="Top"/>
         <Button x:Name="searchServiceBtn" Content="Search" HorizontalAlignment="Left" Margin="714,166,0,0" VerticalAlignment="Top" Width="60" Click="searchServiceBtn_Click"/>
+        <TextBlock x:Name="messagesBox" HorizontalAlignment="Left" Margin="550,86,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
     </Grid>
 </Window>

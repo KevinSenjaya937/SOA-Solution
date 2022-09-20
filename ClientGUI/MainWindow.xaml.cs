@@ -50,8 +50,11 @@ namespace ClientGUI
             servicesComboBox.Items.Add(3);
             servicesComboBox.Items.Add(4);
 
+            createAuthenticatorInstance();
+        }
 
-
+        private void createAuthenticatorInstance()
+        {
             ChannelFactory<IAuthenticator_Server> foobFactory;
             NetTcpBinding tcp = new NetTcpBinding();
             //Set the URL and create the connection!
@@ -59,8 +62,6 @@ namespace ClientGUI
             foobFactory = new ChannelFactory<IAuthenticator_Server>(tcp, URL);
             authServer = foobFactory.CreateChannel();
         }
-
-
 
         // Radio Button Functions
         private void registerRadioBtn_Checked(object sender, RoutedEventArgs e)
@@ -94,8 +95,19 @@ namespace ClientGUI
         // Login / Register Button Function
         private void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
         {
-            
-
+            if (mode == "Register")
+            {
+                string success = authServer.Register(usernameBox.Text, passwordBox.Text);
+                messagesBox.Text = success;
+            }
+            else if (mode == "Login")
+            {
+                token = authServer.Login(usernameBox.Text, passwordBox.Text);
+            }
+            else
+            {
+                messagesBox.Text = "FAILED";
+            }
             // Use authenticator verification here
             // Authenticator verification returns token
             // Save token to private variable

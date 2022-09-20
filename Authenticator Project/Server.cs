@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
+using SOA_SolutionDLL;
 
 namespace Authenticator_Project
 {
