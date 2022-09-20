@@ -1,6 +1,7 @@
-﻿name,desc,endpoint,12,type
+name,desc,endpoint,12,type
 ty,add,endpoint,1,type
 sc,theadd,endpoint,2,type
 kv,adding,endpoint,3,type
 jb,the add,endpoint,4,type
 ol,pop,endpoint,5,type
+Service Name,Service Desc.,Endpoint,1,Type
