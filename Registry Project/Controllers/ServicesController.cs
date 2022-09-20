@@ -9,12 +9,24 @@ using System.Web.Http;
 
 namespace Registry_Project.Controllers
 {
+    [RoutePrefix("api")]
     public class ServicesController : ApiController
     {
+        AuthValidator authValidator = new AuthValidator();
         // GET: api/Services - Returns all
-        public IEnumerable<string> Get()
+        [Route("get/{token}")]
+        [Route("get")]
+        public IEnumerable<Service> Get(int token)
         {
-            return new string[] { "value1", "value2" };
+            Result authResult = authValidator.Validate(token);
+            if(authResult.Status == Result.ResultCodes.Success)
+            {
+                return ServiceToFile.GetAllServices();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [HttpGet]
@@ -37,8 +49,9 @@ namespace Registry_Project.Controllers
         }
 
         // DELETE: api/Services/5
-        public void Delete(int id)
+        public void Delete(string endPoint)
         {
+            ServiceToFile.RemoveFromFile(endPoint);
         }
     }
 }

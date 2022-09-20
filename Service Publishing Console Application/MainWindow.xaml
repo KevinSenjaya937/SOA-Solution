@@ -27,7 +27,7 @@
             <TextBox x:Name="serviceOperandsBox" HorizontalAlignment="Left" Margin="183,161,0,0" TextWrapping="Wrap" Text="Operands" VerticalAlignment="Top" Width="120"/>
             <TextBox x:Name="serviceAPIEndpointBox" HorizontalAlignment="Left" Margin="183,120,0,0" TextWrapping="Wrap" Text="Endpoint" VerticalAlignment="Top" Width="120"/>
             <TextBox x:Name="serviceOperandTypeBox" HorizontalAlignment="Left" Margin="183,198,0,0" TextWrapping="Wrap" Text="Type" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Publish" HorizontalAlignment="Left" Margin="183,236,0,0" VerticalAlignment="Top" Width="120"/>
+            <Button x:Name="publishBtn" Content="Publish" HorizontalAlignment="Left" Margin="183,236,0,0" VerticalAlignment="Top" Width="120" Click="publishBtn_Click"/>
             <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="10,238,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="150"/>
         </Grid>
         <Grid x:Name="unpublishGrid" HorizontalAlignment="Left" Height="240" Margin="457,154,0,0" VerticalAlignment="Top" Width="320">

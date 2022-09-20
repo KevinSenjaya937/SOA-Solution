@@ -30,7 +30,7 @@ namespace Registry_Project.Models
             return result;
         }
 
-        public static IEnumerable<Service> SearchFile(Service inS) 
+        public static IEnumerable<Service> SearchFile(Service inS)
         {
             //Search logic to return services descriptions matching the inS
             string[] servVals;
@@ -40,9 +40,9 @@ namespace Registry_Project.Models
             foreach (string line in lines)
             {
                 servVals = line.Split(' ');
-                if (true) 
+                if (true)
                 {
-                    services.Add(new Service() { 
+                    services.Add(new Service() {
                         Name = servVals[0],
                         Description = servVals[1],
                         APIEndPoint = servVals[2],
@@ -52,6 +52,60 @@ namespace Registry_Project.Models
                 }
             }
             return new List<Service>();
+        }
+
+
+        public static IEnumerable<Service> GetAllServices()
+        {
+            string[] servVals;
+            List<Service> services = new List<Service>();
+
+            string[] lines = File.ReadAllLines(servicePath);
+
+            foreach (string line in lines)
+            {
+                servVals=line.Split(',');
+                if (true)
+                {
+                    services.Add(new Service()
+                    {
+                        Name = servVals[0],
+                        Description = servVals[1],
+                        APIEndPoint = servVals[2],
+                        NumOfOperands = Int16.Parse(servVals[3]),
+                        OperandType = servVals[4]
+                    });
+                }
+            }
+            return services;
+        }
+
+        public static void RemoveFromFile(string endPoint)
+        {
+            IEnumerable<Service> services = GetAllServices();
+            List<Service> validServices = new List<Service>();
+
+            foreach (Service service in services)
+            {
+                if (service.APIEndPoint != endPoint)
+                {
+                    validServices.Add(service);
+                }
+            }
+
+            using(FileStream fileStream = File.Open(servicePath,FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fileStream)
+                {
+                    fileStream.SetLength(0);
+                }
+            }
+
+            foreach (Service service in validServices)
+            {
+                ToFile(service);
+            }
+
         }
     }
 }

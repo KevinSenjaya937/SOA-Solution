@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SOA_SolutionDLL;
 using System.ServiceModel;
+using Newtonsoft;
+using RestSharp;
 
 namespace ClientGUI
 {
@@ -29,6 +31,10 @@ namespace ClientGUI
         private List<TextBlock> textBlocks = new List<TextBlock>();
         private List<String> namesOfServices = new List<String>();
         private static IAuthenticator_Server authServer;
+
+        private static string URL = "http://localhost:64992/";
+        private static RestClient client = new RestClient(URL);
+
 
         public MainWindow()
         {

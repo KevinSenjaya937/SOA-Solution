@@ -111,5 +111,10 @@ namespace Service_Publishing_Console_Application
         {
             
         }
+
+        private void publishBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
