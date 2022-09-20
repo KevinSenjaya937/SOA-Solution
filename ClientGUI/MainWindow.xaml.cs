@@ -35,7 +35,7 @@ namespace ClientGUI
         private List<String> namesOfServices = new List<String>();
         private static IAuthenticator_Server authServer;
 
-        private static string URL = "http://localhost:64992/";
+        private static string URL = "http://localhost:64223/";
         private static RestClient client = new RestClient(URL);
 
 
@@ -114,7 +114,7 @@ namespace ClientGUI
                 else
                 {
                     // Populate 
-                    RestRequest request = new RestRequest("api/Services/{token}");
+                    RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
                     request.AddUrlSegment("token", token);
                     RestResponse response = client.Execute(request);
 
