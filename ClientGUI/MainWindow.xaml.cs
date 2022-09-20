@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SOA_SolutionDLL;
+using System.ServiceModel;
 
 namespace ClientGUI
 {
@@ -22,20 +24,17 @@ namespace ClientGUI
     {
         private String mode;
         private int token;
-        private Dictionary<string, string> methods;
         private Dictionary<string, int> services;
         private List<TextBox> textBoxes = new List<TextBox>();
         private List<TextBlock> textBlocks = new List<TextBlock>();
         private List<String> namesOfServices = new List<String>();
+        private static IAuthenticator_Server authServer;
 
         public MainWindow()
         {
             InitializeComponent();
             loginRadioBtn.IsChecked = true;
 
-            this.methods = new Dictionary<string, string>();
-            methods.Add("Login", "authenticator_login_path");
-            methods.Add("Register", "authenticator_register_path");
 
             this.services = new Dictionary<string, int>();
             services.Add("One", 1);
@@ -50,6 +49,15 @@ namespace ClientGUI
             servicesComboBox.Items.Add(2);
             servicesComboBox.Items.Add(3);
             servicesComboBox.Items.Add(4);
+
+
+
+            ChannelFactory<IAuthenticator_Server> foobFactory;
+            NetTcpBinding tcp = new NetTcpBinding();
+            //Set the URL and create the connection!
+            string URL = "net.tcp://localhost:8100/AuthenticationService";
+            foobFactory = new ChannelFactory<IAuthenticator_Server>(tcp, URL);
+            authServer = foobFactory.CreateChannel();
         }
 
 
@@ -86,7 +94,7 @@ namespace ClientGUI
         // Login / Register Button Function
         private void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
         {
-            String authenticatorPath = methods[mode];
+            
 
             // Use authenticator verification here
             // Authenticator verification returns token

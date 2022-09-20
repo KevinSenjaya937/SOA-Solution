@@ -45,12 +45,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticator_Server.cs" />
-    <Compile Include="IAuthenticator_Server.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SOA_SolutionDLL\SOA_SolutionDLL.csproj">
+      <Project>{f8d216dc-2377-4919-875d-802f5b4654f6}</Project>
+      <Name>SOA_SolutionDLL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
