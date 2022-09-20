@@ -79,7 +79,7 @@ namespace Registry_Project.Models
             return services;
         }
 
-        public static void RemoveFromFile(string endPoint)
+        public static Result RemoveFromFile(string endPoint)
         {
             IEnumerable<Service> services = GetAllServices();
             List<Service> validServices = new List<Service>();
@@ -105,6 +105,7 @@ namespace Registry_Project.Models
                 ToFile(service);
             }
 
+            return new Result() { Status = Result.ResultCodes.Success };
         }
     }
 }

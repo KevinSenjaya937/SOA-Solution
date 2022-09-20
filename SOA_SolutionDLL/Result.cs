@@ -16,6 +16,5 @@ namespace SOA_SolutionDLL
         public int Value { get; set; }
         public ResultCodes Status { get; set; }
         public string Reason { get; set; }
-
     }
 }

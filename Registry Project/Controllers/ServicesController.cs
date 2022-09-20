@@ -13,45 +13,94 @@ namespace Registry_Project.Controllers
     public class ServicesController : ApiController
     {
         AuthValidator authValidator = new AuthValidator();
+
         // GET: api/Services - Returns all
-        [Route("get/{token}")]
-        [Route("get")]
-        public IEnumerable<Service> Get(int token)
+        [Route("Services/{token}")]
+        [Route("Services")]
+        [HttpGet]
+        public ServiceResult Get(int token)
         {
+            ServiceResult serviceResult = new ServiceResult();
             Result authResult = authValidator.Validate(token);
+
             if(authResult.Status == Result.ResultCodes.Success)
             {
-                return ServiceToFile.GetAllServices();
+                serviceResult.Services = ServiceToFile.GetAllServices();
             }
             else
             {
-                return null;
+                serviceResult.Status = Result.ResultCodes.Denied;
+                serviceResult.Reason = authResult.Reason;
             }
+
+            return serviceResult;
         }
 
-        [HttpGet]
         // GET: api/Services/5 - BY ID
-        public IEnumerable<Service> Get(string id)
+        [Route("Services/{token}/{id}")]
+        [Route("Services")]
+        [HttpGet]
+        public ServiceResult SearchByDescription(int token, string id)
         {
-            return ServiceToFile.SearchFile(id);
+            ServiceResult serviceResult = new ServiceResult();
+            Result authResult = authValidator.Validate(token);
+
+            if (authResult.Status == Result.ResultCodes.Success)
+            {
+                serviceResult.Services = ServiceToFile.SearchFile(id);
+            }
+            else
+            {
+                serviceResult.Status = Result.ResultCodes.Denied;
+                serviceResult.Reason = authResult.Reason;
+            }
+
+            return serviceResult;
         }
 
         // POST: api/Services
+        [Route("Services/{token}/{value}")]
+        [Route("Services")]
         [HttpPost]
-        public Result PublishService([FromBody]Service value)
+        public ServiceResult PublishService(int token, [FromBody]Service value)
         {
-            return ServiceToFile.ToFile(value);
-        }
+            ServiceResult serviceResult = new ServiceResult();
+            Result authResult = authValidator.Validate(token);
 
-        // PUT: api/Services/5
-        public void Put(int id, [FromBody]string value)
-        {
+            if (authResult.Status == Result.ResultCodes.Success)
+            {
+                serviceResult.Status = ServiceToFile.ToFile(value).Status;
+            }
+            else
+            {
+                serviceResult.Status = Result.ResultCodes.Denied;
+                serviceResult.Reason = authResult.Reason;
+            }
+
+            return serviceResult;
         }
 
         // DELETE: api/Services/5
-        public void Delete(string endPoint)
+        [Route("Services/{token}/{endPoint}")]
+        [Route("Services")]
+        [HttpPost]
+        [HttpDelete]
+        public ServiceResult Delete(int token, string endPoint)
         {
-            ServiceToFile.RemoveFromFile(endPoint);
+            ServiceResult serviceResult = new ServiceResult();
+            Result authResult = authValidator.Validate(token);
+
+            if (authResult.Status == Result.ResultCodes.Success)
+            {
+                serviceResult.Status = ServiceToFile.RemoveFromFile(endPoint).Status;
+            }
+            else
+            {
+                serviceResult.Status = Result.ResultCodes.Denied;
+                serviceResult.Reason = authResult.Reason;
+            }
+
+            return serviceResult;
         }
     }
 }
