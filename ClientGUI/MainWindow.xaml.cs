@@ -16,6 +16,7 @@ using SOA_SolutionDLL;
 using System.ServiceModel;
 using Newtonsoft;
 using RestSharp;
+using Newtonsoft.Json;
 
 namespace ClientGUI
 {
@@ -26,7 +27,9 @@ namespace ClientGUI
     {
         private String mode;
         private int token;
-        private Dictionary<string, int> services;
+        private Boolean userLoggedIn = false;
+
+        private Dictionary<string, Service> services;
         private List<TextBox> textBoxes = new List<TextBox>();
         private List<TextBlock> textBlocks = new List<TextBlock>();
         private List<String> namesOfServices = new List<String>();
@@ -42,21 +45,15 @@ namespace ClientGUI
             loginRadioBtn.IsChecked = true;
 
 
-            this.services = new Dictionary<string, int>();
-            services.Add("One", 1);
-            services.Add("Two", 2);
-            services.Add("Three", 3);
-            services.Add("Four", 4);
+            this.services = new Dictionary<string, Service>();
+            
 
             // get combo box items from registry project - Services (ADDTwoNumbers, ADDThreeNumbers, ect)
             // add combo box items after authentication
-            servicesComboBox.Items.Add(0);
-            servicesComboBox.Items.Add(1);
-            servicesComboBox.Items.Add(2);
-            servicesComboBox.Items.Add(3);
-            servicesComboBox.Items.Add(4);
 
             createAuthenticatorInstance();
+
+            
         }
 
         private void createAuthenticatorInstance()
@@ -109,6 +106,22 @@ namespace ClientGUI
             else if (mode == "Login")
             {
                 token = authServer.Login(usernameBox.Text, passwordBox.Text);
+
+                if (token == -1)
+                {
+                    messagesBox.Text = "Login failed";
+                }
+                else
+                {
+                    // Populate 
+                    RestRequest request = new RestRequest("api/Services/{token}");
+                    request.AddUrlSegment("token", token);
+                    RestResponse response = client.Execute(request);
+
+                    ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(response.Content);
+                    addComboBoxItems(serviceResult);
+                }
+                
             }
             else
             {
@@ -119,13 +132,15 @@ namespace ClientGUI
             // Save token to private variable
         }
 
+        
 
         // Combo Box Functions
-        private void addComboBoxItems(List<String> services)
+        private void addComboBoxItems(ServiceResult sr)
         {
-            foreach (String service in services)
+            foreach (Service service in sr.Services)
             {
-
+                services.Add(service.Description, service);
+                servicesComboBox.Items.Add(service.Description);
             }
         }
 
