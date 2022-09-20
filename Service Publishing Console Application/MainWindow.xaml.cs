@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ServiceModel;
+using SOA_SolutionDLL;
 
 namespace Service_Publishing_Console_Application
 {
@@ -20,9 +22,94 @@ namespace Service_Publishing_Console_Application
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static IAuthenticator_Server authServer;
+
+        private String mode;
+        private int token;
         public MainWindow()
         {
             InitializeComponent();
+            CreateAuthenticatorInstance();
+            loginRadioBtn.IsChecked = true;
+        }
+
+
+
+        // Authenticator Instance
+        private void CreateAuthenticatorInstance()
+        {
+            ChannelFactory<IAuthenticator_Server> foobFactory;
+            NetTcpBinding tcp = new NetTcpBinding();
+            //Set the URL and create the connection!
+            string URL = "net.tcp://localhost:8100/AuthenticationService";
+            foobFactory = new ChannelFactory<IAuthenticator_Server>(tcp, URL);
+            authServer = foobFactory.CreateChannel();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Radio Button Functions
+        private void registerRadioBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            mode = "Register";
+            changeLoginRegisterBtn();
+        }
+
+        private void loginRadioBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            mode = "Login";
+            changeLoginRegisterBtn();
+        }
+
+        private void changeLoginRegisterBtn()
+        {
+            if (registerRadioBtn.IsChecked == true)
+            {
+                loginRadioBtn.IsChecked = false;
+            }
+            else
+            {
+                registerRadioBtn.IsChecked = false;
+            }
+
+            loginRegisterBtn.IsEnabled = true;
+            loginRegisterBtn.Content = mode;
+        }
+
+        // Login / Register Button Function
+        private void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (mode == "Register")
+            {
+                string success = authServer.Register(usernameBox.Text, passwordBox.Text);
+                messagesBox.Text = success;
+            }
+            else if (mode == "Login")
+            {
+                token = authServer.Login(usernameBox.Text, passwordBox.Text);
+            }
+            else
+            {
+                messagesBox.Text = "FAILED";
+            }
+            // Use authenticator verification here
+            // Authenticator verification returns token
+            // Save token to private variable
+        }
+
+        private void changeLoginRegisterMsgColour()
+        {
+            
         }
     }
 }
