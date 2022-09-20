@@ -33,7 +33,7 @@ namespace Registry_Project.Controllers
         // GET: api/Services/5 - BY ID
         public IEnumerable<Service> Get(string id)
         {
-            return new List<Service>();
+            return ServiceToFile.SearchFile(id);
         }
 
         // POST: api/Services
