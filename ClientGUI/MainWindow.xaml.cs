@@ -114,7 +114,7 @@ namespace ClientGUI
                 else
                 {
                     // Populate 
-                    RestRequest request = new RestRequest("api/Services/{token}");
+                    RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
                     request.AddUrlSegment("token", token);
                     RestResponse response = client.Execute(request);
 

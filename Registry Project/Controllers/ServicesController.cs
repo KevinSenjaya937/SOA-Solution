@@ -59,7 +59,7 @@ namespace Registry_Project.Controllers
         }
 
         // POST: api/Services
-        [Route("Services/{token}/{value}")]
+        [Route("Services/{token}")]
         [Route("Services")]
         [HttpPost]
         public ServiceResult PublishService(int token, [FromBody]Service value)

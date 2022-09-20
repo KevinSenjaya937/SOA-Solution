@@ -24,8 +24,8 @@ namespace Authenticator_Project
             string loginPath = Path.Combine(root, loginFile);
             string tokenPath = Path.Combine(root, tokenFile);
 
-            using (StreamWriter sw = File.CreateText(loginPath)) { }
-            using (StreamWriter sw = File.CreateText(tokenPath)) { }
+            //using (StreamWriter sw = File.CreateText(loginPath)) { }
+            //using (StreamWriter sw = File.CreateText(tokenPath)) { }
         }
 
         /// <summary>

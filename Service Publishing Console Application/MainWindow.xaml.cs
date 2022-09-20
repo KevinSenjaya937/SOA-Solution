@@ -16,6 +16,7 @@ using System.ServiceModel;
 using SOA_SolutionDLL;
 using RestSharp;
 using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace Service_Publishing_Console_Application
 {
@@ -25,10 +26,11 @@ namespace Service_Publishing_Console_Application
     public partial class MainWindow : Window
     {
         private static IAuthenticator_Server authServer;
-        private static string URL = "http://localhost:64223/";
-        private static RestClient client = new RestClient(URL);
+        private static readonly string URL = "http://localhost:64223/";
+        private static readonly RestClient restClient = new RestClient(URL);
 
         private String mode;
+        private bool loggedIn = false;
         private int token;
         public MainWindow()
         {
@@ -90,14 +92,20 @@ namespace Service_Publishing_Console_Application
             else if (mode == "Login")
             {
                 token = authServer.Login(usernameBox.Text, passwordBox.Text);
+                if (token != -1)
+                {
+                    loggedIn = true;
+                    messagesBox.Text = "Logged in";
+                }
+                else 
+                {
+                    messagesBox.Text = "Log in failed";
+                }
             }
             else
             {
                 messagesBox.Text = "FAILED";
             }
-            // Use authenticator verification here
-            // Authenticator verification returns token
-            // Save token to private variable
         }
 
         private void changeLoginRegisterMsgColour()
@@ -107,14 +115,38 @@ namespace Service_Publishing_Console_Application
 
         private void publishBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (serviceNameBox.Text != String.Empty &&
-                serviceDescBox.Text != String.Empty &&
-                serviceAPIEndpointBox.Text != String.Empty &&
-                serviceOperandsBox.Text != String.Empty &&
-                serviceOperandTypeBox.Text != String.Empty)
+            if (loggedIn)
             {
-                RestRequest request = new RestRequest("api/Services/{token}");
-                request.AddUrlSegment("token", this.token);
+                if (serviceNameBox.Text != String.Empty &&
+                    serviceDescBox.Text != String.Empty &&
+                    serviceAPIEndpointBox.Text != String.Empty &&
+                    serviceOperandsBox.Text != String.Empty &&
+                    serviceOperandTypeBox.Text != String.Empty)
+                {
+                    Service service = new Service() { 
+                        Name = serviceNameBox.Text,
+                        Description = serviceDescBox.Text,
+                        APIEndPoint = serviceAPIEndpointBox.Text,
+                        NumOfOperands = Int16.Parse(serviceOperandsBox.Text), //Validate this
+                        OperandType = serviceOperandTypeBox.Text
+                        };
+
+                    RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Post);
+                    restRequest.AddUrlSegment("token", this.token);
+                    restRequest.AddJsonBody<Service>(service);
+                    RestResponse restResponse = restClient.Execute(restRequest);
+
+                    ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
+
+                    if (serviceResult != null)
+                    {
+                        publishStatusText.Text = serviceResult.Status.ToString();
+                    }
+                    else 
+                    {
+                        publishStatusText.Text = "Null return value";
+                    }
+                }
             }
         }
     }
