@@ -115,7 +115,7 @@ namespace Service_Publishing_Console_Application
             {
                 RestRequest request = new RestRequest("api/Services/{token}");
                 request.AddUrlSegment("token", this.token);
-                RestResponse response = 
+            }
         }
     }
 }
