@@ -69,7 +69,7 @@ namespace Registry_Project.Models
                     Name = servVals[0],
                     Description = servVals[1],
                     APIEndPoint = servVals[2],
-                    NumOfOperands = Int16.Parse(servVals[3]),
+                    NumOfOperands = Int32.Parse(servVals[3]),
                     OperandType = servVals[4]
                 });
             }
