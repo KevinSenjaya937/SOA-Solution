@@ -260,10 +260,11 @@ namespace ClientGUI
             }
 
             string endPoint = selectedService.APIEndPoint;
+            endPoint += token + "/";
 
             foreach (int operand in operands)
             {
-                endPoint = endPoint + operand + "/";
+                endPoint += operand + "/";
             }
 
             RestRequest request = new RestRequest(endPoint);

@@ -5,3 +5,4 @@ kv,adding,endpoint,3,type
 jb,the add,endpoint,4,type
 ol,pop,endpoint,5,type
 Service Name,Service Desc.,Endpoint,1,Type
+ADDTwoNumbers,Adding Two Numbers,http://localhost:64992/api/add/,2,int
