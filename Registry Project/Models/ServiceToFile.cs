@@ -9,9 +9,8 @@ namespace Registry_Project.Models
 {
     public static class ServiceToFile
     {
-        private static string root = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName; //Directory containing this solution
-        private static string serviceFile = "Services.txt";
-        private static string servicePath = Path.Combine(root, serviceFile);
+        private static string servicePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/ServiceData.txt").ToString();
+
         public static Result ToFile(Service inS)
         {
             Result result = new Result();
@@ -30,7 +29,7 @@ namespace Registry_Project.Models
             return result;
         }
 
-        public static IEnumerable<Service> SearchFile(Service inS) 
+        public static IEnumerable<Service> SearchFile(string inS) 
         {
             //Search logic to return services descriptions matching the inS
             string[] servVals;
@@ -39,8 +38,8 @@ namespace Registry_Project.Models
             string[] lines = File.ReadAllLines(servicePath);
             foreach (string line in lines)
             {
-                servVals = line.Split(' ');
-                if (true) 
+                servVals = line.Split(',');
+                if (servVals[1].Contains(inS))
                 {
                     services.Add(new Service() { 
                         Name = servVals[0],
@@ -51,7 +50,7 @@ namespace Registry_Project.Models
                     });
                 }
             }
-            return new List<Service>();
+            return services;
         }
     }
 }

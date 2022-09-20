@@ -11,17 +11,12 @@ namespace Registry_Project.Controllers
 {
     public class ServicesController : ApiController
     {
-        // GET: api/Services - Returns all
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         [HttpGet]
         // GET: api/Services/5 - BY ID
         public IEnumerable<Service> Get(string id)
         {
-            return new List<Service>();
+            return ServiceToFile.SearchFile(id);
         }
 
         // POST: api/Services
