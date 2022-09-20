@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceProvider", "ServiceP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service Publishing Console Application", "Service Publishing Console Application\Service Publishing Console Application.csproj", "{4659FD71-B434-430E-87ED-2F25C7D9D0E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA_SolutionDLL", "SOA_SolutionDLL\SOA_SolutionDLL.csproj", "{F8D216DC-2377-4919-875D-802F5B4654F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{4659FD71-B434-430E-87ED-2F25C7D9D0E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4659FD71-B434-430E-87ED-2F25C7D9D0E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4659FD71-B434-430E-87ED-2F25C7D9D0E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8D216DC-2377-4919-875D-802F5B4654F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D216DC-2377-4919-875D-802F5B4654F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D216DC-2377-4919-875D-802F5B4654F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D216DC-2377-4919-875D-802F5B4654F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
