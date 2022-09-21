@@ -87,7 +87,7 @@ namespace Service_Publishing_Console_Application
         // Login / Register Button Function
         private void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (mode == "Register")
+            if (mode == "Register" && !loggedIn)
             {
                 string success = authServer.Register(usernameBox.Text, passwordBox.Text);
                 messagesBox.Text = success;
@@ -147,13 +147,14 @@ namespace Service_Publishing_Console_Application
                     serviceOperandsBox.Text != String.Empty &&
                     serviceOperandTypeBox.Text != String.Empty)
                 {
-                    Service service = new Service() { 
+                    Service service = new Service()
+                    {
                         Name = serviceNameBox.Text,
                         Description = serviceDescBox.Text,
                         APIEndPoint = serviceAPIEndpointBox.Text,
                         NumOfOperands = Int16.Parse(serviceOperandsBox.Text), //Validate this
                         OperandType = serviceOperandTypeBox.Text
-                        };
+                    };
 
                     RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Post);
                     restRequest.AddUrlSegment("token", this.token);
@@ -164,13 +165,26 @@ namespace Service_Publishing_Console_Application
 
                     if (serviceResult != null)
                     {
-                        publishStatusText.Text = serviceResult.Status.ToString();
+                        if (serviceResult.Status == Result.ResultCodes.Success)
+                        {
+                            publishStatusText.Text = serviceResult.Status.ToString();
+                        }
+                        else
+                        {
+                            publishStatusText.Text = serviceResult.Reason.ToString();
+                            messagesBox.Text = "LOGGED OUT";
+                            loggedIn = false;
+                        }
                     }
-                    else 
+                    else
                     {
                         publishStatusText.Text = "Null return value";
                     }
                 }
+            }
+            else 
+            {
+                publishStatusText.Text = "Please log in";
             }
         }
 
@@ -184,13 +198,35 @@ namespace Service_Publishing_Console_Application
                 restRequest.AddJsonBody<Service>(new Service { APIEndPoint = services[srvDescrip].APIEndPoint, Description = srvDescrip });
                 RestResponse restResponse = serviceClient.Execute(restRequest);
 
-                services.Remove(servicesComboBox.SelectedItem.ToString());
-                servicesComboBox.Items.Remove(servicesComboBox.SelectedItem.ToString());
-                unpublishStatusText.Text = "Service Unpublished";
+                ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
+
+                if (serviceResult != null)
+                {
+                    if (serviceResult.Status == Result.ResultCodes.Success)
+                    {
+                        services.Remove(servicesComboBox.SelectedItem.ToString());
+                        servicesComboBox.Items.Remove(servicesComboBox.SelectedItem.ToString());
+                        unpublishStatusText.Text = "Service Unpublished";
+                    }
+                    else
+                    {
+                        unpublishStatusText.Text = serviceResult.Reason.ToString();
+                        messagesBox.Text = "LOGGED OUT";
+                        loggedIn = false;
+                    }
+                }
+                else
+                {
+                    unpublishStatusText.Text = "Null return value";
+                }
             }
-            else if (servicesComboBox.SelectedIndex == -1) 
+            else if (servicesComboBox.SelectedIndex == -1)
             {
                 unpublishStatusText.Text = "Please select a service to unpublish";
+            }
+            else 
+            {
+                unpublishStatusText.Text = "Please login";
             }
         }
     }
