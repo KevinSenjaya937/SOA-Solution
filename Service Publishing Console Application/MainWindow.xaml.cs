@@ -94,7 +94,7 @@ namespace Service_Publishing_Console_Application
             }
             else if (mode == "Login" && !loggedIn)
             {
-                Task<int> task = new Task(authServer.Login(userName: usernameBox.Text, password: passwordBox.Text));
+                //Task<int> task = new Task(authServer.Login(userName: usernameBox.Text, password: passwordBox.Text));
                 token = authServer.Login(usernameBox.Text, passwordBox.Text);
                 if (token != -1)
                 {

@@ -103,7 +103,7 @@ namespace ClientGUI
             this.userName = usernameBox.Text;
             this.password = passwordBox.Text;
 
-            if (mode == "Register")
+            if (mode == "Register" && !this.userLoggedIn)
             {
                 Task<string> task = new Task<string>(registerUser);
                 loginRegisterProgressBarSwitch(true);
@@ -115,7 +115,7 @@ namespace ClientGUI
 
                 messagesBox.Text = success;
             }
-            else if (mode == "Login")
+            else if (mode == "Login" && !this.userLoggedIn)
             {
                 Task<int> task = new Task<int>(loginUser);
                 loginRegisterProgressBarSwitch(true);
@@ -139,12 +139,15 @@ namespace ClientGUI
                     RestResponse response = client.Execute(request);
 
                     ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(response.Content);
-                    addComboBoxItems(serviceResult);
+                    if (serviceResult != null) 
+                    {
+                        addComboBoxItems(serviceResult);
+                    }
                 }
             }
             else
             {
-                messagesBox.Text = "FAILED";
+                messagesBox.Text = "Your already logged in";
             }
 
             loginRegisterProgressBarSwitch(false);
@@ -182,11 +185,26 @@ namespace ClientGUI
         // Combo Box Functions
         private void addComboBoxItems(ServiceResult sr)
         {
-            foreach (Service service in sr.Services)
+            if (sr.Services != null)
             {
-                services.Add(service.Description, service);
-                servicesComboBox.Items.Add(service.Description);
+                foreach (Service service in sr.Services)
+                {
+                    services.Add(service.Description, service);
+                    servicesComboBox.Items.Add(service.Description);
+                }
             }
+            else 
+            {
+                logOut();
+            }
+        }
+
+        private void logOut() 
+        {
+            services.Clear();
+            servicesComboBox.Items.Clear();
+            this.userLoggedIn = false;
+            messagesBox.Text = "You've Been Logged Out";
         }
 
         // Search for a service
@@ -204,7 +222,7 @@ namespace ClientGUI
                 {
                     string desc = service.Description.ToUpper();
 
-                    if (desc.Contains(searchString)) 
+                    if (desc.Contains(searchString))
                     {
                         filteredList.Add(service);
                     }
@@ -223,31 +241,43 @@ namespace ClientGUI
                     serviceSearchBox.Text = "Not found";
                 }
             }
-                
-            
+            else 
+            {
+                serviceSearchBox.Text = "Plase Log in";
+            }       
         }
 
         // Reset combo box
         private void resetSearchBtn_Click(object sender, RoutedEventArgs e)
         {
-            serviceSearchBox.Text = String.Empty;
-            servicesComboBox.Items.Clear();
-            var serviceList = services.Values.ToList();
-
-            foreach (Service service in serviceList)
+            if (this.userLoggedIn)
             {
-                servicesComboBox.Items.Add(service.Description);
+                serviceSearchBox.Text = String.Empty;
+                servicesComboBox.Items.Clear();
+                var serviceList = services.Values.ToList();
+
+                foreach (Service service in serviceList)
+                {
+                    servicesComboBox.Items.Add(service.Description);
+                }
+            }
+            else 
+            {
+                serviceSearchBox.Text = "Plase Log in";
             }
         }
 
         // When a combo box item is selected
         private void servicesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selected = servicesComboBox.SelectedItem.ToString();
-            Service selectedService = services[selected];
+            if (servicesComboBox.SelectedItem != null) 
+            {
+                string selected = servicesComboBox.SelectedItem.ToString();
+                Service selectedService = services[selected];
 
-            createOperandBoxes(selectedService.NumOfOperands);
-            createHelperTexts(selectedService.NumOfOperands);
+                createOperandBoxes(selectedService.NumOfOperands);
+                createHelperTexts(selectedService.NumOfOperands);
+            }
         }
 
         // Create appropriate amount of operand input boxes for service
@@ -332,48 +362,82 @@ namespace ClientGUI
         // Use the service after all text boxes are filled.
         private async void calculateBtn_Click(object sender, RoutedEventArgs e)
         {
-            string selected = servicesComboBox.SelectedItem.ToString();
-            Service selectedService = services[selected];
-            List<int> operands = new List<int>();
-
-            foreach (TextBox textBox in textBoxes)
+            if (this.userLoggedIn && servicesComboBox.SelectedIndex != -1)
             {
-                if (textBox.Text != String.Empty)
+                string selected = servicesComboBox.SelectedItem.ToString();
+                Service selectedService = services[selected];
+                List<int> operands = new List<int>();
+                Result taskResult;
+                bool inputOk = true;
+
+                foreach (TextBox textBox in textBoxes)
                 {
-                    operands.Add(Int32.Parse(textBox.Text));
+                    if (textBox.Text != String.Empty && int.TryParse(textBox.Text, out int num))
+                    {
+                        operands.Add(Int32.Parse(textBox.Text));
+                    }
+                    else 
+                    {
+                        inputOk = false;
+                    }
+                }
+
+                if (inputOk)
+                {
+                    string endPoint = selectedService.APIEndPoint;
+                    endPoint += token + "/";
+
+                    foreach (int operand in operands)
+                    {
+                        endPoint += operand + "/";
+                    }
+
+                    this.endPoint = endPoint;
+
+                    Task<Result> task = new Task<Result>(useService);
+                    calculateProgressBarSwitch(true);
+
+                    task.Start();
+                    calculationStatusMsg.Text = "Calculating...";
+
+                    taskResult = await task;
+
+                    if (taskResult.Status == Result.ResultCodes.Success)
+                    {
+                        resultBox.Text = taskResult.Value.ToString();
+                        calculationStatusMsg.Text = "Complete!";
+                    }
+                    else
+                    {
+                        calculationStatusMsg.Text = taskResult.Reason + " - Logged Out";
+                        logOut();
+                    }
+
+                    calculateProgressBarSwitch(false);
+                }
+                else 
+                {
+                    calculationStatusMsg.Text = "All inputs must be an int";
                 }
             }
-
-            string endPoint = selectedService.APIEndPoint;
-            endPoint += token + "/";
-
-            foreach (int operand in operands)
+            else if (servicesComboBox.SelectedIndex == -1)
             {
-                endPoint += operand + "/";
+                calculationStatusMsg.Text = "Please select a service";
             }
-
-            this.endPoint = endPoint;
-
-            Task<string> task = new Task<string>(useService);
-            calculateProgressBarSwitch(true);
-
-            task.Start();
-            calculationStatusMsg.Text = "Calculating...";
-
-            resultBox.Text = await task;
-
-            calculationStatusMsg.Text = "Complete!";
-            calculateProgressBarSwitch(false);
+            else 
+            {
+                calculationStatusMsg.Text = "Please log in";
+            }
         }
 
-        private string useService()
+        private Result useService()
         {
             RestRequest request = new RestRequest(this.endPoint);
             RestResponse response = client.Execute(request);
 
             Result result = JsonConvert.DeserializeObject<Result>(response.Content);
             
-            return result.Value.ToString();
+            return result;
         }
 
         private void calculateProgressBarSwitch(Boolean switchBool)
