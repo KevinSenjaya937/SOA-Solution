@@ -202,6 +202,8 @@ namespace Service_Publishing_Console_Application
 
         private async void publishBtn_Click(object sender, RoutedEventArgs e)
         {
+            
+
             if (loggedIn)
             {
                 if (serviceNameBox.Text != String.Empty &&
@@ -232,12 +234,14 @@ namespace Service_Publishing_Console_Application
                         if (serviceResult.Status == Result.ResultCodes.Success)
                         {
                             publishStatusText.Text = serviceResult.Status.ToString();
+                            updateComboBoxItems();
                         }
                         else
                         {
                             publishStatusText.Text = serviceResult.Reason.ToString();
                             messagesBox.Text = "LOGGED OUT";
                             loggedIn = false;
+                            publishStatusText.Text = "Please Login";
                         }
                     }
                     else
@@ -245,13 +249,17 @@ namespace Service_Publishing_Console_Application
                         publishStatusText.Text = "Null return value";
                     }
                 }
+                else
+                {
+                    publishStatusText.Text = "Please Fill All Fields";
+                }
             }
             else 
             {
                 publishStatusText.Text = "Please log in";
             }
             publishProgressBarSwitch(false);
-            updateComboBoxItems();
+            
         }
 
         private ServiceResult publishService()
@@ -299,6 +307,7 @@ namespace Service_Publishing_Console_Application
                         unpublishStatusText.Text = serviceResult.Reason.ToString();
                         messagesBox.Text = "LOGGED OUT";
                         loggedIn = false;
+                        unpublishStatusText.Text = "Please Login";
                     }
                 }
                 else
@@ -306,7 +315,7 @@ namespace Service_Publishing_Console_Application
                     unpublishStatusText.Text = "Null return value";
                 }
             }
-            else if (servicesComboBox.SelectedIndex == -1)
+            else if (servicesComboBox.SelectedIndex == -1 && loggedIn)
             {
                 unpublishStatusText.Text = "Please select a service to unpublish";
             }

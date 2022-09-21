@@ -15,17 +15,17 @@
         <RadioButton x:Name="loginRadioBtn" Content="Login" HorizontalAlignment="Left" Margin="650,92,0,0" VerticalAlignment="Top" Checked="loginRadioBtn_Checked"/>
         <Button x:Name="loginRegisterBtn" Content="Button" HorizontalAlignment="Left" Margin="622,191,0,0" VerticalAlignment="Top" Width="82" Click="loginRegisterBtn_Click"/>
         <TextBlock x:Name="messagesBox" HorizontalAlignment="Left" Margin="631,248,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Foreground="#FF80B05D"/>
-        <TextBlock x:Name="serviceNameText" HorizontalAlignment="Left" Margin="120,56,0,0" TextWrapping="Wrap" Text="Name: " VerticalAlignment="Top"/>
-        <TextBlock x:Name="apiEndpointText" HorizontalAlignment="Left" Margin="74,130,0,0" TextWrapping="Wrap" Text="API Endpoint: " VerticalAlignment="Top"/>
-        <TextBlock x:Name="descriptionText" HorizontalAlignment="Left" Margin="85,92,0,0" TextWrapping="Wrap" Text="Description: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="serviceNameText" HorizontalAlignment="Left" Margin="66,56,0,0" TextWrapping="Wrap" Text="Service Name: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="apiEndpointText" HorizontalAlignment="Left" Margin="19,131,0,0" TextWrapping="Wrap" Text="Service API Endpoint: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="descriptionText" HorizontalAlignment="Left" Margin="30,92,0,0" TextWrapping="Wrap" Text="Service Description: " VerticalAlignment="Top"/>
         <TextBlock x:Name="apiEndpointText_Copy" HorizontalAlignment="Left" Margin="20,172,0,0" TextWrapping="Wrap" Text="Number of Operands: " VerticalAlignment="Top"/>
         <TextBlock x:Name="apiEndpointText_Copy1" HorizontalAlignment="Left" Margin="66,209,0,0" TextWrapping="Wrap" Text="Operand Type: " VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="17,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Publish Service" FontWeight="Bold"/>
-        <TextBox x:Name="serviceNameBox" HorizontalAlignment="Left" Margin="190,56,0,0" TextWrapping="Wrap" Text="Service Name" VerticalAlignment="Top" Width="250"/>
-        <TextBox x:Name="serviceDescBox" HorizontalAlignment="Left" Margin="190,92,0,0" TextWrapping="Wrap" Text="Service Desc." VerticalAlignment="Top" Width="250"/>
-        <TextBox x:Name="serviceOperandsBox" HorizontalAlignment="Left" Margin="190,171,0,0" TextWrapping="Wrap" Text="Operands" VerticalAlignment="Top" Width="250"/>
-        <TextBox x:Name="serviceAPIEndpointBox" HorizontalAlignment="Left" Margin="190,130,0,0" TextWrapping="Wrap" Text="Endpoint" VerticalAlignment="Top" Width="250"/>
-        <TextBox x:Name="serviceOperandTypeBox" HorizontalAlignment="Left" Margin="190,208,0,0" TextWrapping="Wrap" Text="Type" VerticalAlignment="Top" Width="250"/>
+        <TextBox x:Name="serviceNameBox" HorizontalAlignment="Left" Margin="190,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <TextBox x:Name="serviceDescBox" HorizontalAlignment="Left" Margin="190,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <TextBox x:Name="serviceOperandsBox" HorizontalAlignment="Left" Margin="190,171,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <TextBox x:Name="serviceAPIEndpointBox" HorizontalAlignment="Left" Margin="190,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
+        <TextBox x:Name="serviceOperandTypeBox" HorizontalAlignment="Left" Margin="190,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
         <Button x:Name="publishBtn" Content="Publish" HorizontalAlignment="Left" Margin="255,240,0,0" VerticalAlignment="Top" Width="120" Click="publishBtn_Click"/>
         <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="94,278,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="150" Foreground="#FF80B05D"/>
         <TextBlock HorizontalAlignment="Left" Margin="17,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Unpublish Service" FontWeight="Bold"/>
