@@ -113,6 +113,7 @@ namespace ClientGUI
                 }
                 else
                 {
+                    messagesBox.Text = "Login Successful";
                     // Populate 
                     RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
                     request.AddUrlSegment("token", token);
@@ -144,6 +145,55 @@ namespace ClientGUI
             }
         }
 
+        // Search for a service
+        private void searchServiceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var servicesList = services.Values.ToList();
+
+            var searchString = serviceSearchBox.Text.ToUpper();
+
+            List<Service> filteredList = new List<Service>();
+
+            foreach (Service service in servicesList)
+            {
+                string desc = service.Description.ToUpper();
+
+                if (desc.Contains(searchString)) 
+                {
+                    filteredList.Add(service);
+                }
+            }
+
+            if (filteredList.Any())
+            {
+                servicesComboBox.Items.Clear();
+                foreach (Service service in filteredList)
+                {
+                    servicesComboBox.Items.Add(service.Description);
+                }
+            }
+            else
+            {
+                serviceSearchBox.Text = "Not found";
+            }
+            
+        }
+
+        // Reset combo box
+        private void resetSearchBtn_Click(object sender, RoutedEventArgs e)
+        {
+            serviceSearchBox.Text = String.Empty;
+            servicesComboBox.Items.Clear();
+            var serviceList = services.Values.ToList();
+
+            foreach (Service service in serviceList)
+            {
+                servicesComboBox.Items.Add(service.Description);
+            }
+        }
+
+        // When a combo box item is selected
         private void servicesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string selected = servicesComboBox.SelectedItem.ToString();
@@ -153,13 +203,14 @@ namespace ClientGUI
             createHelperTexts(selectedService.NumOfOperands);
         }
 
+        // Create appropriate amount of operand input boxes for service
         private void createOperandBoxes(int numOfOperands)
         {
             removeTextBoxes();
             TextBox[] operandTextBoxes = new TextBox[numOfOperands];
             
-            int x = 381;
-            int y = 188;
+            int x = 426;
+            int y = 67;
 
             for (int i = 0; i < numOfOperands; i++)
             {
@@ -184,11 +235,12 @@ namespace ClientGUI
             }    
         }
 
+        // Create appropriate amount of helper texts for service
         private void createHelperTexts(int numOfOperands)
         {
             TextBlock[] helperTexts = new TextBlock[numOfOperands];
-            int x = 255;
-            int y = 189;
+            int x = 294;
+            int y = 66;
 
             for (int i = 0; i < numOfOperands; i++)
             {
@@ -213,6 +265,7 @@ namespace ClientGUI
             }
         }
 
+        // Remove text boxes and blocks if a different service is selected
         private void removeTextBoxes()
         {
             foreach (TextBox textBox in textBoxes)
@@ -228,23 +281,8 @@ namespace ClientGUI
             this.textBlocks.Clear();
         }
 
-        private void searchServiceBtn_Click(object sender, RoutedEventArgs e)
-        {
-            bool found = services.ContainsKey(serviceSearchBox.Text);
-            
-            if (found)
-            {
-                bool exists = servicesComboBox.Items.Contains(services[serviceSearchBox.Text]);
 
-                // Search for the matching services from the registry.
-                if (exists)
-                {
-                    servicesComboBox.SelectedItem = services[serviceSearchBox.Text];
-                }
-                
-            }
-        }
-
+        // Use the service after all text boxes are filled.
         private void calculateBtn_Click(object sender, RoutedEventArgs e)
         {
             string selected = servicesComboBox.SelectedItem.ToString();
@@ -274,5 +312,7 @@ namespace ClientGUI
 
             resultBox.Text = result.Value.ToString();
         }
+
+        
     }
 }
