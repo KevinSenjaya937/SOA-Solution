@@ -38,22 +38,19 @@ namespace ClientGUI
         private static string URL = "http://localhost:64223/";
         private static RestClient client = new RestClient(URL);
 
+        private string userName;
+        private string password;
+        private string endPoint;
+
 
         public MainWindow()
         {
             InitializeComponent();
             loginRadioBtn.IsChecked = true;
 
-
-            this.services = new Dictionary<string, Service>();
-            
-
-            // get combo box items from registry project - Services (ADDTwoNumbers, ADDThreeNumbers, ect)
-            // add combo box items after authentication
+            this.services = new Dictionary<string, Service>();           
 
             createAuthenticatorInstance();
-
-            
         }
 
         private void createAuthenticatorInstance()
@@ -66,16 +63,19 @@ namespace ClientGUI
             authServer = foobFactory.CreateChannel();
         }
 
+
+
+
         // Radio Button Functions
         private void registerRadioBtn_Checked(object sender, RoutedEventArgs e)
         {
-            mode = "Register";
+            this.mode = "Register";
             changeLoginRegisterBtn();
         }
 
         private void loginRadioBtn_Checked(object sender, RoutedEventArgs e)
         {
-            mode = "Login";
+            this.mode = "Login";
             changeLoginRegisterBtn();
         }
 
@@ -91,21 +91,39 @@ namespace ClientGUI
             }
 
             loginRegisterBtn.IsEnabled = true;
-            loginRegisterBtn.Content = mode;
+            loginRegisterBtn.Content = this.mode;
         }
 
 
+
+
         // Login / Register Button Function
-        private void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
+        private async void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
         {
+            this.userName = usernameBox.Text;
+            this.password = passwordBox.Text;
+
             if (mode == "Register")
             {
-                string success = authServer.Register(usernameBox.Text, passwordBox.Text);
+                Task<string> task = new Task<string>(registerUser);
+                loginRegisterProgressBarSwitch(true);
+
+                task.Start();
+                messagesBox.Text = "Registration Commmenced...";
+
+                string success = await task;
+
                 messagesBox.Text = success;
             }
             else if (mode == "Login")
             {
-                token = authServer.Login(usernameBox.Text, passwordBox.Text);
+                Task<int> task = new Task<int>(loginUser);
+                loginRegisterProgressBarSwitch(true);
+
+                task.Start();
+                messagesBox.Text = "Login Commenced...";
+
+                this.token = await task;
 
                 if (token == -1)
                 {
@@ -113,6 +131,7 @@ namespace ClientGUI
                 }
                 else
                 {
+                    this.userLoggedIn = true;
                     messagesBox.Text = "Login Successful";
                     // Populate 
                     RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
@@ -122,17 +141,43 @@ namespace ClientGUI
                     ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(response.Content);
                     addComboBoxItems(serviceResult);
                 }
-                
             }
             else
             {
                 messagesBox.Text = "FAILED";
             }
-            // Use authenticator verification here
-            // Authenticator verification returns token
-            // Save token to private variable
+
+            loginRegisterProgressBarSwitch(false);
         }
 
+        private int loginUser()
+        {
+            return authServer.Login(this.userName, this.password);
+        }
+
+        private string registerUser()
+        {
+            return authServer.Register(this.userName, this.password);
+        }
+
+        private void loginRegisterProgressBarSwitch(Boolean switchBool)
+        {
+
+            registerLoginProgressBar.IsIndeterminate = switchBool;
+
+            registerRadioBtn.IsEnabled = !switchBool;
+            loginRadioBtn.IsEnabled = !switchBool;
+            loginRegisterBtn.IsEnabled = !switchBool;
+            searchServiceBtn.IsEnabled = !switchBool;
+            resetSearchBtn.IsEnabled = !switchBool;
+            calculateBtn.IsEnabled = !switchBool;
+            
+            usernameBox.Dispatcher.Invoke(new Action(() => usernameBox.IsReadOnly = switchBool));
+            passwordBox.Dispatcher.Invoke(new Action(() => passwordBox.IsReadOnly = switchBool));
+            resultBox.Dispatcher.Invoke(new Action(() => resultBox.IsReadOnly = switchBool));
+            serviceSearchBox.Dispatcher.Invoke(new Action(() => serviceSearchBox.IsReadOnly = switchBool));
+            
+        }
         
 
         // Combo Box Functions
@@ -148,35 +193,38 @@ namespace ClientGUI
         // Search for a service
         private void searchServiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            
-            var servicesList = services.Values.ToList();
-
-            var searchString = serviceSearchBox.Text.ToUpper();
-
-            List<Service> filteredList = new List<Service>();
-
-            foreach (Service service in servicesList)
+            if (this.userLoggedIn)
             {
-                string desc = service.Description.ToUpper();
+                var servicesList = services.Values.ToList();
 
-                if (desc.Contains(searchString)) 
+                var searchString = serviceSearchBox.Text.ToUpper();
+
+                List<Service> filteredList = new List<Service>();
+
+                foreach (Service service in servicesList)
                 {
-                    filteredList.Add(service);
+                    string desc = service.Description.ToUpper();
+
+                    if (desc.Contains(searchString)) 
+                    {
+                        filteredList.Add(service);
+                    }
+                }
+
+                if (filteredList.Any())
+                {
+                    servicesComboBox.Items.Clear();
+                    foreach (Service service in filteredList)
+                    {
+                        servicesComboBox.Items.Add(service.Description);
+                    }
+                }
+                else
+                {
+                    serviceSearchBox.Text = "Not found";
                 }
             }
-
-            if (filteredList.Any())
-            {
-                servicesComboBox.Items.Clear();
-                foreach (Service service in filteredList)
-                {
-                    servicesComboBox.Items.Add(service.Description);
-                }
-            }
-            else
-            {
-                serviceSearchBox.Text = "Not found";
-            }
+                
             
         }
 
@@ -283,7 +331,7 @@ namespace ClientGUI
 
 
         // Use the service after all text boxes are filled.
-        private void calculateBtn_Click(object sender, RoutedEventArgs e)
+        private async void calculateBtn_Click(object sender, RoutedEventArgs e)
         {
             string selected = servicesComboBox.SelectedItem.ToString();
             Service selectedService = services[selected];
@@ -305,12 +353,45 @@ namespace ClientGUI
                 endPoint += operand + "/";
             }
 
-            RestRequest request = new RestRequest(endPoint);
+            this.endPoint = endPoint;
+
+            Task<string> task = new Task<string>(useService);
+            calculateProgressBarSwitch(true);
+
+            task.Start();
+            calculationStatusMsg.Text = "Calculating...";
+
+            resultBox.Text = await task;
+
+            calculationStatusMsg.Text = "Complete!";
+            calculateProgressBarSwitch(false);
+        }
+
+        private string useService()
+        {
+            RestRequest request = new RestRequest(this.endPoint);
             RestResponse response = client.Execute(request);
 
             Result result = JsonConvert.DeserializeObject<Result>(response.Content);
+            
+            return result.Value.ToString();
+        }
 
-            resultBox.Text = result.Value.ToString();
+        private void calculateProgressBarSwitch(Boolean switchBool)
+        {
+            calculateProgressBar.IsIndeterminate = switchBool;
+
+            registerRadioBtn.IsEnabled = !switchBool;
+            loginRadioBtn.IsEnabled = !switchBool;
+            loginRegisterBtn.IsEnabled = !switchBool;
+            searchServiceBtn.IsEnabled = !switchBool;
+            resetSearchBtn.IsEnabled = !switchBool;
+            calculateBtn.IsEnabled = !switchBool;
+
+            usernameBox.Dispatcher.Invoke(new Action(() => usernameBox.IsReadOnly = switchBool));
+            passwordBox.Dispatcher.Invoke(new Action(() => passwordBox.IsReadOnly = switchBool));
+            resultBox.Dispatcher.Invoke(new Action(() => resultBox.IsReadOnly = switchBool));
+            serviceSearchBox.Dispatcher.Invoke(new Action(() => serviceSearchBox.IsReadOnly = switchBool));
         }
 
         

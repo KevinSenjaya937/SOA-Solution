@@ -43,7 +43,7 @@ namespace Authenticator_Project
                 sw.WriteLine(userName + " " + password);
             }
 
-            return "successfully registered";
+            return "Successfully Registered!";
         }
 
         /// <summary>

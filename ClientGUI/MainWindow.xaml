@@ -18,12 +18,15 @@
         <TextBlock HorizontalAlignment="Left" Margin="2879,693,0,0" TextWrapping="Wrap" Text="Input Operand 1" VerticalAlignment="Top"/>
         <TextBox x:Name="serviceSearchBox" HorizontalAlignment="Left" Margin="396,16,0,0" TextWrapping="Wrap" Text="Search Service Name" VerticalAlignment="Top" Width="150"/>
         <Button x:Name="searchServiceBtn" Content="Search" HorizontalAlignment="Left" Margin="553,15,0,0" VerticalAlignment="Top" Width="100" Click="searchServiceBtn_Click"/>
-        <TextBlock x:Name="messagesBox" HorizontalAlignment="Left" Margin="137,185,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Foreground="#FF84B27D"/>
+        <TextBlock x:Name="messagesBox" HorizontalAlignment="Left" Margin="34,215,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Foreground="#FF84B27D"/>
         <Button x:Name="calculateBtn" Content="Calculate" HorizontalAlignment="Left" Margin="553,52,0,0" VerticalAlignment="Top" Width="100" Click="calculateBtn_Click"/>
         <TextBox x:Name="resultBox" HorizontalAlignment="Left" Margin="665,52,0,0" TextWrapping="Wrap" Text="Result" VerticalAlignment="Top" Width="100"/>
         <TextBlock HorizontalAlignment="Left" Margin="34,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Login" FontWeight="Bold"/>
         <GridSplitter HorizontalAlignment="Left" Height="430" Margin="263,0,0,0" VerticalAlignment="Center" Width="5"/>
         <TextBlock HorizontalAlignment="Left" Margin="294,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Test Service" FontWeight="Bold"/>
         <Button x:Name="resetSearchBtn" Content="Reset" HorizontalAlignment="Left" Margin="665,14,0,0" VerticalAlignment="Top" Width="100" Click="resetSearchBtn_Click" />
+        <ProgressBar x:Name="calculateProgressBar" HorizontalAlignment="Left" Height="10" Margin="553,88,0,0" VerticalAlignment="Top" Width="100"/>
+        <TextBlock x:Name="calculationStatusMsg" HorizontalAlignment="Left" Margin="665,82,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Foreground="#FF7CBE62"/>
+        <ProgressBar x:Name="registerLoginProgressBar" HorizontalAlignment="Left" Height="10" Margin="34,194,0,0" VerticalAlignment="Top" Width="205"/>
     </Grid>
 </Window>
