@@ -1,8 +1,4 @@
-name,desc,endpoint,12,type
-ty,add,endpoint,1,type
-sc,theadd,endpoint,2,type
-kv,adding,endpoint,3,type
-jb,the add,endpoint,4,type
-ol,pop,endpoint,5,type
-Service Name,Service Desc.,Endpoint,1,Type
-ADDTwoNumbers,Adding Two Numbers,http://localhost:64992/api/add/,2,int
+ADDTwoNumbers,Adding Two Numbers,http://localhost:64992/api/add/,2,Integer
+ADDThreeNumbers,Adding Three Numbers,http://localhost:64992/api/add/,3,Integer
+MULTwoNumber,Multiplying Two Numbers,http://localhost:64992/api/multiply/,2,Integer
+MULThreeNumber,Multiplying Three Numbers,http://localhost:64992/api/multiply/,3,Integer
