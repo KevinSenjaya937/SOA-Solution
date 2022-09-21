@@ -80,19 +80,18 @@ namespace Registry_Project.Controllers
             return serviceResult;
         }
 
-        // DELETE: api/Services/5
-        [Route("Services/{token}/{endPoint}")]
+        // DELETE: api/Services
+        [Route("Services/{token}")]
         [Route("Services")]
-        [HttpPost]
         [HttpDelete]
-        public ServiceResult Delete(int token, string endPoint)
+        public ServiceResult Delete(int token, [FromBody]Service value)
         {
             ServiceResult serviceResult = new ServiceResult();
             Result authResult = authValidator.Validate(token);
 
             if (authResult.Status == Result.ResultCodes.Success)
             {
-                serviceResult.Status = ServiceToFile.RemoveFromFile(endPoint).Status;
+                serviceResult.Status = ServiceToFile.RemoveFromFile(value).Status;
             }
             else
             {

@@ -30,7 +30,7 @@
         <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="17,248,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="150"/>
         <TextBlock HorizontalAlignment="Left" Margin="17,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Unpublish Service" FontWeight="Bold"/>
         <ComboBox x:Name="servicesComboBox" HorizontalAlignment="Left" Margin="17,359,0,0" VerticalAlignment="Top" Width="180"/>
-        <Button x:Name="unpublishBtn" Content="Unpublish" HorizontalAlignment="Left" Margin="220,361,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="unpublishBtn" Content="Unpublish" HorizontalAlignment="Left" Margin="220,361,0,0" VerticalAlignment="Top" Width="120" Click="unpublishBtn_Click"/>
         <TextBlock x:Name="unpublishStatusText" HorizontalAlignment="Left" Margin="400,361,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <GridSplitter HorizontalAlignment="Left" Height="5" Margin="0,288,0,0" VerticalAlignment="Top" Width="790"/>
         <GridSplitter HorizontalAlignment="Left" Height="291" Margin="471,0,0,0" VerticalAlignment="Top" Width="3"/>

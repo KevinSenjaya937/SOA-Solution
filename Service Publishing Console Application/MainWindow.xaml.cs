@@ -27,8 +27,9 @@ namespace Service_Publishing_Console_Application
     {
         private static IAuthenticator_Server authServer;
         private static readonly string URL = "http://localhost:64223/";
-        private static readonly RestClient restClient = new RestClient(URL);
+        private static readonly RestClient serviceClient = new RestClient(URL);
 
+        private Dictionary<string, Service> services;
         private String mode;
         private bool loggedIn = false;
         private int token;
@@ -37,6 +38,8 @@ namespace Service_Publishing_Console_Application
             InitializeComponent();
             CreateAuthenticatorInstance();
             loginRadioBtn.IsChecked = true;
+
+            this.services = new Dictionary<string, Service>();
         }
 
 
@@ -89,13 +92,25 @@ namespace Service_Publishing_Console_Application
                 string success = authServer.Register(usernameBox.Text, passwordBox.Text);
                 messagesBox.Text = success;
             }
-            else if (mode == "Login")
+            else if (mode == "Login" && !loggedIn)
             {
                 token = authServer.Login(usernameBox.Text, passwordBox.Text);
                 if (token != -1)
                 {
                     loggedIn = true;
                     messagesBox.Text = "Logged in";
+
+                    //Get all services
+                    RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
+                    request.AddUrlSegment("token", token);
+                    RestResponse response = serviceClient.Execute(request);
+
+                    ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(response.Content);
+                    addComboBoxItems(serviceResult);
+                }
+                else if (loggedIn)
+                {
+                    messagesBox.Text = "Your already logged in";
                 }
                 else 
                 {
@@ -105,6 +120,15 @@ namespace Service_Publishing_Console_Application
             else
             {
                 messagesBox.Text = "FAILED";
+            }
+        }
+
+        private void addComboBoxItems(ServiceResult sr)
+        {
+            foreach (Service service in sr.Services)
+            {
+                services.Add(service.Description, service);
+                servicesComboBox.Items.Add(service.Description);
             }
         }
 
@@ -134,7 +158,7 @@ namespace Service_Publishing_Console_Application
                     RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Post);
                     restRequest.AddUrlSegment("token", this.token);
                     restRequest.AddJsonBody<Service>(service);
-                    RestResponse restResponse = restClient.Execute(restRequest);
+                    RestResponse restResponse = serviceClient.Execute(restRequest);
 
                     ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
 
@@ -147,6 +171,26 @@ namespace Service_Publishing_Console_Application
                         publishStatusText.Text = "Null return value";
                     }
                 }
+            }
+        }
+
+        private void unpublishBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (loggedIn && servicesComboBox.SelectedIndex != -1)
+            {
+                RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Delete);
+                restRequest.AddUrlSegment("token", this.token);
+                string srvDescrip = servicesComboBox.SelectedItem.ToString();
+                restRequest.AddJsonBody<Service>(new Service { APIEndPoint = services[srvDescrip].APIEndPoint, Description = srvDescrip });
+                RestResponse restResponse = serviceClient.Execute(restRequest);
+
+                services.Remove(servicesComboBox.SelectedItem.ToString());
+                servicesComboBox.Items.Remove(servicesComboBox.SelectedItem.ToString());
+                unpublishStatusText.Text = "Service Unpublished";
+            }
+            else if (servicesComboBox.SelectedIndex == -1) 
+            {
+                unpublishStatusText.Text = "Please select a service to unpublish";
             }
         }
     }
