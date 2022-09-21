@@ -33,6 +33,13 @@ namespace Service_Publishing_Console_Application
         private String mode;
         private bool loggedIn = false;
         private int token;
+
+        private string userName;
+        private string password;
+        private Service serviceToPublish;
+        private Service serviceToUnpublish;
+        private string srvDescrip;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -85,29 +92,35 @@ namespace Service_Publishing_Console_Application
         }
 
         // Login / Register Button Function
-        private void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
+        private async void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
         {
+            this.userName = usernameBox.Text;
+            this.password = passwordBox.Text;
+            loginRegisterProgressBarSwitch(true);
+
             if (mode == "Register" && !loggedIn)
             {
-                string success = authServer.Register(usernameBox.Text, passwordBox.Text);
+                Task<string> task = new Task<string>(registerUser);
+                
+
+                task.Start();
+                messagesBox.Text = "Registration Commmenced...";
+
+                string success = await task;
                 messagesBox.Text = success;
             }
             else if (mode == "Login" && !loggedIn)
             {
-                Task<int> task = new Task(authServer.Login(userName: usernameBox.Text, password: passwordBox.Text));
-                token = authServer.Login(usernameBox.Text, passwordBox.Text);
-                if (token != -1)
+                Task<int> task = new Task<int>(loginUser);
+
+                task.Start();
+                messagesBox.Text = "Login Commenced...";
+
+                this.token = await task;
+
+                if (token == -1)
                 {
-                    loggedIn = true;
-                    messagesBox.Text = "Logged in";
-
-                    //Get all services
-                    RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
-                    request.AddUrlSegment("token", token);
-                    RestResponse response = serviceClient.Execute(request);
-
-                    ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(response.Content);
-                    addComboBoxItems(serviceResult);
+                    messagesBox.Text = "Login Failed";
                 }
                 else if (loggedIn)
                 {
@@ -115,13 +128,67 @@ namespace Service_Publishing_Console_Application
                 }
                 else 
                 {
-                    messagesBox.Text = "Log in failed";
+                    this.loggedIn = true;
+                    messagesBox.Text = "Logged Successful";
+
+                    //Get all services
+                    updateComboBoxItems();
                 }
             }
             else
             {
                 messagesBox.Text = "FAILED";
             }
+            loginRegisterProgressBarSwitch(false);
+        }
+
+        private void updateComboBoxItems()
+        {
+            servicesComboBox.Items.Clear();
+            services.Clear();
+            RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
+            request.AddUrlSegment("token", token);
+            RestResponse response = serviceClient.Execute(request);
+
+            ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(response.Content);
+            addComboBoxItems(serviceResult);
+        }
+
+        private int loginUser()
+        {
+            return authServer.Login(this.userName, this.password);
+        }
+
+        private string registerUser()
+        {
+            return authServer.Register(this.userName, this.password);
+        }
+
+        private void disableForm(Boolean switchBool)
+        {
+            registerRadioBtn.IsEnabled = !switchBool;
+            loginRadioBtn.IsEnabled = !switchBool;
+            loginRegisterBtn.IsEnabled = !switchBool;
+
+            publishBtn.IsEnabled = !switchBool;
+            unpublishBtn.IsEnabled = !switchBool;
+
+            servicesComboBox.IsEnabled = !switchBool;
+
+            usernameBox.Dispatcher.Invoke(new Action(() => usernameBox.IsReadOnly = switchBool));
+            passwordBox.Dispatcher.Invoke(new Action(() => passwordBox.IsReadOnly = switchBool));
+            serviceNameBox.Dispatcher.Invoke(new Action(() => serviceNameBox.IsReadOnly = switchBool));
+            serviceDescBox.Dispatcher.Invoke(new Action(() => serviceDescBox.IsReadOnly = switchBool));
+            serviceAPIEndpointBox.Dispatcher.Invoke(new Action(() => serviceAPIEndpointBox.IsReadOnly = switchBool));
+            serviceOperandsBox.Dispatcher.Invoke(new Action(() => serviceOperandsBox.IsReadOnly = switchBool));
+            serviceOperandTypeBox.Dispatcher.Invoke(new Action(() => serviceOperandTypeBox.IsReadOnly = switchBool));
+        }
+
+        private void loginRegisterProgressBarSwitch(Boolean switchBool)
+        {
+
+            registerLoginProgressBar.IsIndeterminate = switchBool;
+            disableForm(switchBool);
         }
 
         private void addComboBoxItems(ServiceResult sr)
@@ -133,12 +200,7 @@ namespace Service_Publishing_Console_Application
             }
         }
 
-        private void changeLoginRegisterMsgColour()
-        {
-            
-        }
-
-        private void publishBtn_Click(object sender, RoutedEventArgs e)
+        private async void publishBtn_Click(object sender, RoutedEventArgs e)
         {
             if (loggedIn)
             {
@@ -148,7 +210,7 @@ namespace Service_Publishing_Console_Application
                     serviceOperandsBox.Text != String.Empty &&
                     serviceOperandTypeBox.Text != String.Empty)
                 {
-                    Service service = new Service()
+                    this.serviceToPublish = new Service()
                     {
                         Name = serviceNameBox.Text,
                         Description = serviceDescBox.Text,
@@ -157,12 +219,13 @@ namespace Service_Publishing_Console_Application
                         OperandType = serviceOperandTypeBox.Text
                     };
 
-                    RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Post);
-                    restRequest.AddUrlSegment("token", this.token);
-                    restRequest.AddJsonBody<Service>(service);
-                    RestResponse restResponse = serviceClient.Execute(restRequest);
+                    Task<ServiceResult> task = new Task<ServiceResult>(publishService);
+                    publishProgressBarSwitch(true);
 
-                    ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
+                    task.Start();
+                    publishStatusText.Text = "Commencing Publish...";
+
+                    ServiceResult serviceResult = await task;
 
                     if (serviceResult != null)
                     {
@@ -187,19 +250,41 @@ namespace Service_Publishing_Console_Application
             {
                 publishStatusText.Text = "Please log in";
             }
+            publishProgressBarSwitch(false);
+            updateComboBoxItems();
         }
 
-        private void unpublishBtn_Click(object sender, RoutedEventArgs e)
+        private ServiceResult publishService()
+        {
+            RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Post);
+            restRequest.AddUrlSegment("token", this.token);
+            restRequest.AddJsonBody<Service>(this.serviceToPublish);
+            RestResponse restResponse = serviceClient.Execute(restRequest);
+
+            ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
+
+            return serviceResult;
+        }
+
+        private void publishProgressBarSwitch(Boolean switchBool)
+        {
+            publishProgressBar.IsIndeterminate = switchBool;
+            disableForm(switchBool);
+        }
+
+        private async void unpublishBtn_Click(object sender, RoutedEventArgs e)
         {
             if (loggedIn && servicesComboBox.SelectedIndex != -1)
             {
-                RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Delete);
-                restRequest.AddUrlSegment("token", this.token);
-                string srvDescrip = servicesComboBox.SelectedItem.ToString();
-                restRequest.AddJsonBody<Service>(new Service { APIEndPoint = services[srvDescrip].APIEndPoint, Description = srvDescrip });
-                RestResponse restResponse = serviceClient.Execute(restRequest);
+                this.srvDescrip = servicesComboBox.SelectedItem.ToString();
 
-                ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
+                Task<ServiceResult> task = new Task<ServiceResult>(unpublishService);
+                unpublishProgressBarSwitch(true);
+                
+                task.Start();
+                unpublishStatusText.Text = "Unpublish Commencing...";
+
+                ServiceResult serviceResult = await task;
 
                 if (serviceResult != null)
                 {
@@ -229,6 +314,25 @@ namespace Service_Publishing_Console_Application
             {
                 unpublishStatusText.Text = "Please login";
             }
+            unpublishProgressBarSwitch(false);
+        }
+
+        private ServiceResult unpublishService()
+        {
+            RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Delete);
+            restRequest.AddUrlSegment("token", this.token);
+            restRequest.AddJsonBody<Service>(new Service { APIEndPoint = services[srvDescrip].APIEndPoint, Description = srvDescrip });
+            RestResponse restResponse = serviceClient.Execute(restRequest);
+
+            ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
+
+            return serviceResult;
+        }
+
+        private void unpublishProgressBarSwitch(Boolean switchBool)
+        {
+            unpublishProgressBar.IsIndeterminate = switchBool;
+            disableForm(switchBool);
         }
     }
 }
