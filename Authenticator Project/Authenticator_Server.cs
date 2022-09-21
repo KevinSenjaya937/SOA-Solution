@@ -16,16 +16,22 @@ namespace Authenticator_Project
         private string loginFile = "User_Passwords.txt";
         private string tokenFile = "User_Tokens.txt";
 
+        private static bool makeOnce = false;
         /// <summary>
         /// Clears the exsisting files
         /// </summary>
         public Authenticator_Server() 
         {
-            string loginPath = Path.Combine(root, loginFile);
-            string tokenPath = Path.Combine(root, tokenFile);
+            if (!makeOnce) 
+            {
+                string loginPath = Path.Combine(root, loginFile);
+                string tokenPath = Path.Combine(root, tokenFile);
 
-            //using (StreamWriter sw = File.CreateText(loginPath)) { }
-            //using (StreamWriter sw = File.CreateText(tokenPath)) { }
+                using (StreamWriter sw = File.CreateText(loginPath)) { }
+                using (StreamWriter sw = File.CreateText(tokenPath)) { }
+
+                makeOnce = true;
+            }
         }
 
         /// <summary>
