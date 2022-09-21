@@ -27,7 +27,7 @@
         <TextBox x:Name="serviceAPIEndpointBox" HorizontalAlignment="Left" Margin="190,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
         <TextBox x:Name="serviceOperandTypeBox" HorizontalAlignment="Left" Margin="190,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
         <Button x:Name="publishBtn" Content="Publish" HorizontalAlignment="Left" Margin="255,240,0,0" VerticalAlignment="Top" Width="120" Click="publishBtn_Click"/>
-        <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="94,278,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="150" Foreground="#FF80B05D"/>
+        <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="16,242,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="150" Foreground="#FF80B05D"/>
         <TextBlock HorizontalAlignment="Left" Margin="17,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Unpublish Service" FontWeight="Bold"/>
         <ComboBox x:Name="servicesComboBox" HorizontalAlignment="Left" Margin="17,359,0,0" VerticalAlignment="Top" Width="180"/>
         <Button x:Name="unpublishBtn" Content="Unpublish" HorizontalAlignment="Left" Margin="220,361,0,0" VerticalAlignment="Top" Width="120" Click="unpublishBtn_Click"/>

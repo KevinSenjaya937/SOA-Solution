@@ -417,7 +417,7 @@ namespace ClientGUI
                 }
                 else 
                 {
-                    calculationStatusMsg.Text = "All inputs must be an int";
+                    calculationStatusMsg.Text = "All inputs must be an Integer";
                 }
             }
             else if (servicesComboBox.SelectedIndex == -1)

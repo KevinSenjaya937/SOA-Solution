@@ -212,51 +212,68 @@ namespace Service_Publishing_Console_Application
                     serviceOperandsBox.Text != String.Empty &&
                     serviceOperandTypeBox.Text != String.Empty)
                 {
-                    this.serviceToPublish = new Service()
+                    bool inputOk = true;
+                    if (int.TryParse(serviceOperandsBox.Text, out int num))
                     {
-                        Name = serviceNameBox.Text,
-                        Description = serviceDescBox.Text,
-                        APIEndPoint = serviceAPIEndpointBox.Text,
-                        NumOfOperands = Int16.Parse(serviceOperandsBox.Text), //Validate this
-                        OperandType = serviceOperandTypeBox.Text
-                    };
-
-                    Task<ServiceResult> task = new Task<ServiceResult>(publishService);
-                    publishProgressBarSwitch(true);
-
-                    task.Start();
-                    publishStatusText.Text = "Commencing Publish...";
-
-                    ServiceResult serviceResult = await task;
-
-                    if (serviceResult != null)
-                    {
-                        if (serviceResult.Status == Result.ResultCodes.Success)
+                        this.serviceToPublish = new Service()
                         {
-                            publishStatusText.Text = serviceResult.Status.ToString();
-                            updateComboBoxItems();
+                            Name = serviceNameBox.Text,
+                            Description = serviceDescBox.Text,
+                            APIEndPoint = serviceAPIEndpointBox.Text,
+                            NumOfOperands = Int16.Parse(serviceOperandsBox.Text), //Validate this
+                            OperandType = serviceOperandTypeBox.Text
+                        };
+                    }
+                    else
+                    {
+                        inputOk = false;
+                    }
+
+                    
+                    if (inputOk)
+                    {
+                        Task<ServiceResult> task = new Task<ServiceResult>(publishService);
+                        publishProgressBarSwitch(true);
+
+                        task.Start();
+                        publishStatusText.Text = "Commencing Publish...";
+
+                        ServiceResult serviceResult = await task;
+
+                        if (serviceResult != null)
+                        {
+                            if (serviceResult.Status == Result.ResultCodes.Success)
+                            {
+                                publishStatusText.Text = serviceResult.Status.ToString();
+                                updateComboBoxItems();
+                            }
+                            else
+                            {
+                                publishStatusText.Text = serviceResult.Reason.ToString();
+                                messagesBox.Text = "LOGGED OUT";
+                                loggedIn = false;
+                                publishStatusText.Text = "Please Login";
+                            }
                         }
                         else
                         {
-                            publishStatusText.Text = serviceResult.Reason.ToString();
-                            messagesBox.Text = "LOGGED OUT";
-                            loggedIn = false;
-                            publishStatusText.Text = "Please Login";
+                            publishStatusText.Text = "Null return value";
                         }
                     }
                     else
                     {
-                        publishStatusText.Text = "Null return value";
+                        publishStatusText.Text = "Please Fill Number Of Operand with an Integer";
                     }
                 }
                 else
                 {
                     publishStatusText.Text = "Please Fill All Fields";
                 }
+                    
             }
             else 
             {
-                publishStatusText.Text = "Please log in";
+                publishStatusText.Text = "Please Login";
             }
             publishProgressBarSwitch(false);
             
