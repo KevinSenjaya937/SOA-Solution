@@ -176,7 +176,6 @@ namespace ClientGUI
             passwordBox.Dispatcher.Invoke(new Action(() => passwordBox.IsReadOnly = switchBool));
             resultBox.Dispatcher.Invoke(new Action(() => resultBox.IsReadOnly = switchBool));
             serviceSearchBox.Dispatcher.Invoke(new Action(() => serviceSearchBox.IsReadOnly = switchBool));
-            
         }
         
 
