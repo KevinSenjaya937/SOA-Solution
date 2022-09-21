@@ -27,8 +27,9 @@ namespace Service_Publishing_Console_Application
     {
         private static IAuthenticator_Server authServer;
         private static readonly string URL = "http://localhost:64223/";
-        private static readonly RestClient restClient = new RestClient(URL);
+        private static readonly RestClient serviceClient = new RestClient(URL);
 
+        private Dictionary<string, Service> services;
         private String mode;
         private bool loggedIn = false;
         private int token;
@@ -37,6 +38,8 @@ namespace Service_Publishing_Console_Application
             InitializeComponent();
             CreateAuthenticatorInstance();
             loginRadioBtn.IsChecked = true;
+
+            this.services = new Dictionary<string, Service>();
         }
 
 
@@ -84,12 +87,12 @@ namespace Service_Publishing_Console_Application
         // Login / Register Button Function
         private void loginRegisterBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (mode == "Register")
+            if (mode == "Register" && !loggedIn)
             {
                 string success = authServer.Register(usernameBox.Text, passwordBox.Text);
                 messagesBox.Text = success;
             }
-            else if (mode == "Login")
+            else if (mode == "Login" && !loggedIn)
             {
                 Task<int> task = new Task(authServer.Login(userName: usernameBox.Text, password: passwordBox.Text));
                 token = authServer.Login(usernameBox.Text, passwordBox.Text);
@@ -97,6 +100,18 @@ namespace Service_Publishing_Console_Application
                 {
                     loggedIn = true;
                     messagesBox.Text = "Logged in";
+
+                    //Get all services
+                    RestRequest request = new RestRequest("api/Services/{token}", Method.Get);
+                    request.AddUrlSegment("token", token);
+                    RestResponse response = serviceClient.Execute(request);
+
+                    ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(response.Content);
+                    addComboBoxItems(serviceResult);
+                }
+                else if (loggedIn)
+                {
+                    messagesBox.Text = "Your already logged in";
                 }
                 else 
                 {
@@ -106,6 +121,15 @@ namespace Service_Publishing_Console_Application
             else
             {
                 messagesBox.Text = "FAILED";
+            }
+        }
+
+        private void addComboBoxItems(ServiceResult sr)
+        {
+            foreach (Service service in sr.Services)
+            {
+                services.Add(service.Description, service);
+                servicesComboBox.Items.Add(service.Description);
             }
         }
 
@@ -124,30 +148,86 @@ namespace Service_Publishing_Console_Application
                     serviceOperandsBox.Text != String.Empty &&
                     serviceOperandTypeBox.Text != String.Empty)
                 {
-                    Service service = new Service() { 
+                    Service service = new Service()
+                    {
                         Name = serviceNameBox.Text,
                         Description = serviceDescBox.Text,
                         APIEndPoint = serviceAPIEndpointBox.Text,
                         NumOfOperands = Int16.Parse(serviceOperandsBox.Text), //Validate this
                         OperandType = serviceOperandTypeBox.Text
-                        };
+                    };
 
                     RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Post);
                     restRequest.AddUrlSegment("token", this.token);
                     restRequest.AddJsonBody<Service>(service);
-                    RestResponse restResponse = restClient.Execute(restRequest);
+                    RestResponse restResponse = serviceClient.Execute(restRequest);
 
                     ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
 
                     if (serviceResult != null)
                     {
-                        publishStatusText.Text = serviceResult.Status.ToString();
+                        if (serviceResult.Status == Result.ResultCodes.Success)
+                        {
+                            publishStatusText.Text = serviceResult.Status.ToString();
+                        }
+                        else
+                        {
+                            publishStatusText.Text = serviceResult.Reason.ToString();
+                            messagesBox.Text = "LOGGED OUT";
+                            loggedIn = false;
+                        }
                     }
-                    else 
+                    else
                     {
                         publishStatusText.Text = "Null return value";
                     }
                 }
+            }
+            else 
+            {
+                publishStatusText.Text = "Please log in";
+            }
+        }
+
+        private void unpublishBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (loggedIn && servicesComboBox.SelectedIndex != -1)
+            {
+                RestRequest restRequest = new RestRequest("api/Services/{token}", Method.Delete);
+                restRequest.AddUrlSegment("token", this.token);
+                string srvDescrip = servicesComboBox.SelectedItem.ToString();
+                restRequest.AddJsonBody<Service>(new Service { APIEndPoint = services[srvDescrip].APIEndPoint, Description = srvDescrip });
+                RestResponse restResponse = serviceClient.Execute(restRequest);
+
+                ServiceResult serviceResult = JsonConvert.DeserializeObject<ServiceResult>(restResponse.Content);
+
+                if (serviceResult != null)
+                {
+                    if (serviceResult.Status == Result.ResultCodes.Success)
+                    {
+                        services.Remove(servicesComboBox.SelectedItem.ToString());
+                        servicesComboBox.Items.Remove(servicesComboBox.SelectedItem.ToString());
+                        unpublishStatusText.Text = "Service Unpublished";
+                    }
+                    else
+                    {
+                        unpublishStatusText.Text = serviceResult.Reason.ToString();
+                        messagesBox.Text = "LOGGED OUT";
+                        loggedIn = false;
+                    }
+                }
+                else
+                {
+                    unpublishStatusText.Text = "Null return value";
+                }
+            }
+            else if (servicesComboBox.SelectedIndex == -1)
+            {
+                unpublishStatusText.Text = "Please select a service to unpublish";
+            }
+            else 
+            {
+                unpublishStatusText.Text = "Please login";
             }
         }
     }

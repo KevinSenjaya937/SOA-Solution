@@ -76,14 +76,14 @@ namespace Registry_Project.Models
             return services;
         }
 
-        public static Result RemoveFromFile(string endPoint)
+        public static Result RemoveFromFile(Service endPoint)
         {
             IEnumerable<Service> services = GetAllServices();
             List<Service> validServices = new List<Service>();
 
             foreach (Service service in services)
             {
-                if (service.APIEndPoint != endPoint)
+                if (service.APIEndPoint != endPoint.APIEndPoint || service.Description != endPoint.Description)
                 {
                     validServices.Add(service);
                 }

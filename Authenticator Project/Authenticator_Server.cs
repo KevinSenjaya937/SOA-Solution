@@ -12,20 +12,26 @@ namespace Authenticator_Project
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     internal class Authenticator_Server : IAuthenticator_Server
     {
-        private string root = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName; //Directory containing this solution
-        private string loginFile = "User_Passwords.txt";
-        private string tokenFile = "User_Tokens.txt";
+        private static string root = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName; //Directory containing this solution
+        private static string loginFile = "User_Passwords.txt";
+        private static string tokenFile = "User_Tokens.txt";
 
+        private static bool makeOnce = false;
         /// <summary>
         /// Clears the exsisting files
         /// </summary>
         public Authenticator_Server() 
         {
-            string loginPath = Path.Combine(root, loginFile);
-            string tokenPath = Path.Combine(root, tokenFile);
+            if (!makeOnce) 
+            {
+                string loginPath = Path.Combine(root, loginFile);
+                string tokenPath = Path.Combine(root, tokenFile);
 
-            //using (StreamWriter sw = File.CreateText(loginPath)) { }
-            //using (StreamWriter sw = File.CreateText(tokenPath)) { }
+                using (StreamWriter sw = File.CreateText(loginPath)) { }
+                using (StreamWriter sw = File.CreateText(tokenPath)) { }
+
+                makeOnce = true;
+            }
         }
 
         /// <summary>
@@ -116,7 +122,7 @@ namespace Authenticator_Project
         /// <summary>
         /// Used to clear the token file
         /// </summary>
-        private void ClearTokens() 
+        internal static void ClearTokens() 
         {
             string tokenPath = Path.Combine(root, tokenFile);
 
