@@ -14,7 +14,7 @@
         <RadioButton x:Name="registerRadioBtn" Content="Register" HorizontalAlignment="Left" Margin="516,92,0,0" VerticalAlignment="Top" Checked="registerRadioBtn_Checked"/>
         <RadioButton x:Name="loginRadioBtn" Content="Login" HorizontalAlignment="Left" Margin="650,92,0,0" VerticalAlignment="Top" Checked="loginRadioBtn_Checked"/>
         <Button x:Name="loginRegisterBtn" Content="Button" HorizontalAlignment="Left" Margin="622,191,0,0" VerticalAlignment="Top" Width="82" Click="loginRegisterBtn_Click"/>
-        <TextBlock x:Name="messagesBox" HorizontalAlignment="Left" Margin="716,193,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="#FF80B05D"/>
+        <TextBlock x:Name="messagesBox" HorizontalAlignment="Left" Margin="631,248,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Foreground="#FF80B05D"/>
         <TextBlock x:Name="serviceNameText" HorizontalAlignment="Left" Margin="120,56,0,0" TextWrapping="Wrap" Text="Name: " VerticalAlignment="Top"/>
         <TextBlock x:Name="apiEndpointText" HorizontalAlignment="Left" Margin="74,130,0,0" TextWrapping="Wrap" Text="API Endpoint: " VerticalAlignment="Top"/>
         <TextBlock x:Name="descriptionText" HorizontalAlignment="Left" Margin="85,92,0,0" TextWrapping="Wrap" Text="Description: " VerticalAlignment="Top"/>
@@ -26,15 +26,18 @@
         <TextBox x:Name="serviceOperandsBox" HorizontalAlignment="Left" Margin="190,171,0,0" TextWrapping="Wrap" Text="Operands" VerticalAlignment="Top" Width="250"/>
         <TextBox x:Name="serviceAPIEndpointBox" HorizontalAlignment="Left" Margin="190,130,0,0" TextWrapping="Wrap" Text="Endpoint" VerticalAlignment="Top" Width="250"/>
         <TextBox x:Name="serviceOperandTypeBox" HorizontalAlignment="Left" Margin="190,208,0,0" TextWrapping="Wrap" Text="Type" VerticalAlignment="Top" Width="250"/>
-        <Button x:Name="publishBtn" Content="Publish" HorizontalAlignment="Left" Margin="220,246,0,0" VerticalAlignment="Top" Width="120" Click="publishBtn_Click"/>
-        <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="17,248,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="150"/>
+        <Button x:Name="publishBtn" Content="Publish" HorizontalAlignment="Left" Margin="255,240,0,0" VerticalAlignment="Top" Width="120" Click="publishBtn_Click"/>
+        <TextBlock x:Name="publishStatusText" HorizontalAlignment="Left" Margin="94,278,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="150" Foreground="#FF80B05D"/>
         <TextBlock HorizontalAlignment="Left" Margin="17,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Unpublish Service" FontWeight="Bold"/>
         <ComboBox x:Name="servicesComboBox" HorizontalAlignment="Left" Margin="17,359,0,0" VerticalAlignment="Top" Width="180"/>
         <Button x:Name="unpublishBtn" Content="Unpublish" HorizontalAlignment="Left" Margin="220,361,0,0" VerticalAlignment="Top" Width="120" Click="unpublishBtn_Click"/>
-        <TextBlock x:Name="unpublishStatusText" HorizontalAlignment="Left" Margin="400,361,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <GridSplitter HorizontalAlignment="Center" Height="5" Margin="0,288,0,0" VerticalAlignment="Top" Width="800"/>
-        <GridSplitter HorizontalAlignment="Left" Height="291" Margin="471,0,0,0" VerticalAlignment="Top" Width="3"/>
+        <TextBlock x:Name="unpublishStatusText" HorizontalAlignment="Left" Margin="504,361,0,0" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Foreground="#FF80B05D"/>
+        <GridSplitter HorizontalAlignment="Center" Height="5" Margin="0,310,0,0" VerticalAlignment="Top" Width="800"/>
+        <GridSplitter HorizontalAlignment="Left" Height="310" Margin="471,0,0,0" VerticalAlignment="Top" Width="6"/>
         <TextBlock HorizontalAlignment="Left" Margin="497,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Login / Register" FontWeight="Bold" Width="130"/>
+        <ProgressBar x:Name="registerLoginProgressBar" HorizontalAlignment="Left" Height="10" Margin="602,230,0,0" VerticalAlignment="Top" Width="120"/>
+        <ProgressBar x:Name="publishProgressBar" HorizontalAlignment="Left" Height="10" Margin="255,283,0,0" VerticalAlignment="Top" Width="120"/>
+        <ProgressBar x:Name="unpublishProgressBar" HorizontalAlignment="Left" Height="10" Margin="357,368,0,0" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>
