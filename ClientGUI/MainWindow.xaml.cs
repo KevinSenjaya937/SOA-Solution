@@ -434,9 +434,16 @@ namespace ClientGUI
         {
             RestRequest request = new RestRequest(this.endPoint);
             RestResponse response = client.Execute(request);
+            Result result;
 
-            Result result = JsonConvert.DeserializeObject<Result>(response.Content);
-            
+            if (response.IsSuccessStatusCode)
+            {
+                result = JsonConvert.DeserializeObject<Result>(response.Content);
+            }
+            else 
+            {
+                result = new Result() { Status = Result.ResultCodes.Denied, Reason = response.ErrorException.ToString() };
+            }           
             return result;
         }
 
